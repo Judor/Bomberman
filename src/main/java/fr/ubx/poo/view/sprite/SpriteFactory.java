@@ -1,7 +1,6 @@
 /*
  * Copyright (c) 2020. Laurent Réveillère
  */
-
 package fr.ubx.poo.view.sprite;
 
 import static fr.ubx.poo.view.image.ImageResource.*;
@@ -13,7 +12,7 @@ import fr.ubx.poo.view.image.ImageFactory;
 import javafx.scene.layout.Pane;
 
 
-public final class SpriteFactory {
+public final class SpriteFactory { 
 
     public static Sprite createDecor(Pane layer, Position position, Decor decor) {
         ImageFactory factory = ImageFactory.getInstance();
@@ -25,6 +24,22 @@ public final class SpriteFactory {
             return new SpriteDecor(layer, factory.get(BOX), position);
         if (decor instanceof Bomberwoman)
             return new SpriteDecor(layer, factory.get(BOMBERWOMAN), position);
+        if (decor instanceof Bombnumberdec)
+            return new SpriteDecor(layer, factory.get(BOMBNUMBERDEC), position);
+        if (decor instanceof Bombnumberinc)
+            return new SpriteDecor(layer, factory.get(BOMBNUMBERINC), position);
+        if (decor instanceof Bombrangedec)
+            return new SpriteDecor(layer, factory.get(BOMBRANGEDEC), position);
+        if (decor instanceof Bombrangeinc)
+            return new SpriteDecor(layer, factory.get(BOMBRANGEINC), position); 
+        if (decor instanceof Doornextopened)
+            return new SpriteDecor(layer, factory.get(DOORNEXTOPENED), position);
+        if (decor instanceof Doornextclosed)
+            return new SpriteDecor(layer, factory.get(DOORNEXTCLOSED), position);
+        if (decor instanceof Key)
+            return new SpriteDecor(layer, factory.get(KEY), position);
+        if (decor instanceof Heart)
+            return new SpriteDecor(layer, factory.get(HEART), position);
         return null;
     }
 

@@ -23,6 +23,16 @@ public enum ImageResource {
     PLAYER_UP("player_up.png"),
     STONE("stone.png"),
     TREE("tree.png"),
+    BOX("box.png"),
+    BOMBERWOMAN("bomberwoman.png"),
+    BOMBNUMBERDEC("bonus_bomb_nb_dec.png"),
+    BOMBNUMBERINC("bonus_bomb_nb_inc.png"),
+    BOMBRANGEDEC("bonus_bomb_range_dec.png"),
+    BOMBRANGEINC("bonus_bomb_range_inc.png"),
+    DOORNEXTOPENED("door_opened.png"),
+    DOORNEXTCLOSED("door_closed.png"),
+    
+    
     ;
 
     private final String FileName;
