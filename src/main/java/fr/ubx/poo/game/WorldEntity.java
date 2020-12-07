@@ -24,7 +24,7 @@ public enum WorldEntity {
     BombRangeDec('<'),
     BombNumberInc('+'),
     BombNumberDec('-')
-        ;
+    ;
 
 
     private char getCode() {
