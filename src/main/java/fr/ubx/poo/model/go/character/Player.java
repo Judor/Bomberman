@@ -108,6 +108,9 @@ public class Player extends GameObject implements Movable {
          	game.getWorld().setAffichage(true);
          	game.getWorld().set(nextnextPos, new Box());
          }
+        if(nextdec instanceof Bomberwoman ) {
+            winner=true;
+        }
         
         
         

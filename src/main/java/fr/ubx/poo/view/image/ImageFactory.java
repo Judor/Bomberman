@@ -57,6 +57,7 @@ public final class ImageFactory {
         return get(directions[direction.ordinal()]);
     }
 
+
     /**
      * Holder
      */

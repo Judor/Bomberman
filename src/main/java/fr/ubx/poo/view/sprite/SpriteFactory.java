@@ -12,7 +12,7 @@ import fr.ubx.poo.view.image.ImageFactory;
 import javafx.scene.layout.Pane;
 
 
-public final class SpriteFactory { 
+public final class SpriteFactory {
 
     public static Sprite createDecor(Pane layer, Position position, Decor decor) {
         ImageFactory factory = ImageFactory.getInstance();
@@ -31,7 +31,7 @@ public final class SpriteFactory {
         if (decor instanceof Bombrangedec)
             return new SpriteDecor(layer, factory.get(BOMBRANGEDEC), position);
         if (decor instanceof Bombrangeinc)
-            return new SpriteDecor(layer, factory.get(BOMBRANGEINC), position); 
+            return new SpriteDecor(layer, factory.get(BOMBRANGEINC), position);
         if (decor instanceof Doornextopened)
             return new SpriteDecor(layer, factory.get(DOORNEXTOPENED), position);
         if (decor instanceof Doornextclosed)
@@ -40,7 +40,8 @@ public final class SpriteFactory {
             return new SpriteDecor(layer, factory.get(KEY), position);
         if (decor instanceof Heart)
             return new SpriteDecor(layer, factory.get(HEART), position);
-        return null;
+
+        throw new RuntimeException("Unsupported sprite for decor " + decor);
     }
 
     public static Sprite createPlayer(Pane layer, Player player) {
