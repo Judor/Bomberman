@@ -16,7 +16,7 @@ public class WorldStatic extends World {
                     {Empty, Tree, Tree, Tree, Empty, Empty, Empty, Empty, Empty, Stone, Empty, Empty},
                     {Empty, Empty, Empty, Empty, Empty, Empty, BombRangeInc, Empty, Empty, Empty, Empty, Empty},
                     {Stone, Stone, Stone, Empty, Stone, Empty, Box, Box, Stone, Stone, Box, Stone},
-                    {Empty, DoorNextClosed, Empty, Empty, Empty, Empty, Empty, Empty, Monster, Empty, Empty, Empty},
+                    {Empty, DoorNextClosed, Empty, Empty, Empty, Empty, Empty, Empty,WorldEntity.Monster, Empty, Empty, Empty},
                     {Empty, BombNumberDec, Empty, Empty, Empty, Empty, Empty, Empty, BombNumberInc, Empty, Empty, Princess}
             };
     public WorldStatic() {

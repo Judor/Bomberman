@@ -7,14 +7,13 @@ package fr.ubx.poo.model.go.character;
 import fr.ubx.poo.game.Direction;
 import fr.ubx.poo.game.Position;
 import fr.ubx.poo.model.Movable;
-import fr.ubx.poo.model.decor.Decor;
 import fr.ubx.poo.model.decor.*;
 import fr.ubx.poo.model.go.GameObject;
 import fr.ubx.poo.game.Game;
 
 public class Player extends GameObject implements Movable {
 
-    private final boolean alive = true;
+    private boolean alive = true;
     Direction direction;
     private boolean moveRequested = false;
     private int lives = 1;
@@ -101,7 +100,6 @@ public class Player extends GameObject implements Movable {
             	game.getWorld().clear(nextPos);
             	game.getWorld().setAffichage(true);
         	}
-        	 
         }
         if(nextdec instanceof Box  ) {
          	game.getWorld().clear(nextPos);
@@ -111,10 +109,14 @@ public class Player extends GameObject implements Movable {
         if(nextdec instanceof Bomberwoman ) {
             winner=true;
         }
-        
-        
-        
-    
+        /* On veut voir si le joueur se dirige sur un monster. Si oui, on baisse sa vie de 1. Si elle est égale à 0, il meurt.
+        if(nextnextPos instanceof Monster){
+            if (lives==1){
+                alive=false;
+            }
+            lives=lives-1;
+
+         */
     }
 
    

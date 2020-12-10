@@ -10,6 +10,7 @@ import fr.ubx.poo.model.go.GameObject;
 import fr.ubx.poo.game.Game;
 
 public class Monster extends GameObject implements Movable {
+    private final boolean alive = true;
     Direction direction;
     private int lives=1;
     private boolean moveRequested = false;
@@ -48,6 +49,7 @@ public class Monster extends GameObject implements Movable {
                 requestMove(Direction.W );
                 break;
         }
+
     }
 
     public void requestMove(Direction direction) {
@@ -65,7 +67,6 @@ public class Monster extends GameObject implements Movable {
             return false;
         }
         return true;
-
     }
 
     public void doMove(Direction direction){

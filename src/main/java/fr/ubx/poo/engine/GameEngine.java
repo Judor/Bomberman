@@ -8,7 +8,7 @@ import fr.ubx.poo.game.Direction;
 import fr.ubx.poo.view.sprite.Sprite;
 import fr.ubx.poo.view.sprite.SpriteFactory;
 import fr.ubx.poo.game.Game;
-import fr.ubx.poo.model.go.character.Player;
+import fr.ubx.poo.model.go.character.*;
 import javafx.animation.AnimationTimer;
 import javafx.application.Platform;
 import javafx.scene.Group;
@@ -31,17 +31,20 @@ public final class GameEngine {
     private final String windowTitle;
     private final Game game;
     private final Player player;
+    private Monster monster;
     private final List<Sprite> sprites = new ArrayList<>();
     private StatusBar statusBar;
     private Pane layer;
     private Input input;
     private Stage stage;
     private Sprite spritePlayer;
+    private Sprite spriteMonster;
 
     public GameEngine(final String windowTitle, Game game, final Stage stage) {
         this.windowTitle = windowTitle;
         this.game = game;
         this.player = game.getPlayer();
+        this.monster = game.getMonster();
         initialize(stage, game);
         buildAndSetGameLoop();
     }
@@ -69,6 +72,7 @@ public final class GameEngine {
         // Create decor sprites
         game.getWorld().forEach( (pos,d) -> sprites.add(SpriteFactory.createDecor(layer, pos, d)));
         spritePlayer = SpriteFactory.createPlayer(layer, player);
+        spriteMonster = SpriteFactory.createMonster(layer,monster);
 
     }
 
@@ -96,15 +100,24 @@ public final class GameEngine {
         }
         if (input.isMoveDown()) {
             player.requestMove(Direction.S);
+            monster.RandomMove();
         }
         if (input.isMoveLeft()) {
             player.requestMove(Direction.W);
+            monster.RandomMove();
         }
         if (input.isMoveRight()) {
             player.requestMove(Direction.E);
+            monster.RandomMove();
         }
         if (input.isMoveUp()) {
             player.requestMove(Direction.N);
+            monster.RandomMove();
+        }
+        if(input.isBomb()){
+        }
+        if(input.isKey()){
+
         }
         input.clear();
     }
@@ -131,14 +144,15 @@ public final class GameEngine {
 
     private void update(long now) {
         player.update(now);
+        monster.update(now);
 
         if (player.isAlive() == false) {
             gameLoop.stop();
-            showMessage("Perdu!", Color.RED);
+            showMessage("C'est la loose ! ", Color.RED);
         }
-        if (player.isWinner()) {
+        if (player.isWinner() == true ) {
             gameLoop.stop();
-            showMessage("Gagné", Color.BLUE);
+            showMessage("Et c'est win ! ", Color.BLUE);
         }
     }
 
@@ -152,6 +166,7 @@ public final class GameEngine {
         sprites.forEach(Sprite::render);
         
         spritePlayer.render();
+        spriteMonster.render();
     }
 
     public void start() {

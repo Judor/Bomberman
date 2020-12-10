@@ -20,6 +20,7 @@ public class SpriteMonster extends SpriteGameObject {
     @Override
     public void updateImage() {
         Monster monster = (Monster) go;
-        setImage(ImageFactory.getInstance().getPlayer(monster.getDirection()));
+        setImage(ImageFactory.getInstance().getMonster(monster.getDirection()));
     }
+
 }
