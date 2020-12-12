@@ -14,7 +14,6 @@ import java.util.Properties;
 import fr.ubx.poo.model.go.character.*;
 
 public class Game {
-
     private final World world;
     private final Player player;
     private Monster monster;

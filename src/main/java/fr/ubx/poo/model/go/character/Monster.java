@@ -9,6 +9,8 @@ import fr.ubx.poo.model.decor.*;
 import fr.ubx.poo.model.go.GameObject;
 import fr.ubx.poo.game.Game;
 
+
+
 public class Monster extends GameObject implements Movable {
     private final boolean alive = true;
     Direction direction;
@@ -21,7 +23,6 @@ public class Monster extends GameObject implements Movable {
         this.direction=Direction.S;
         this.lives=1;
     }
-
     public int getLives() {
         return lives;
     }
@@ -32,6 +33,8 @@ public class Monster extends GameObject implements Movable {
     public Direction getDirection() {
         return direction;
     }
+
+
 
     public void RandomMove(){
         int Random = (int)(Math.random()*4);
@@ -49,7 +52,6 @@ public class Monster extends GameObject implements Movable {
                 requestMove(Direction.W );
                 break;
         }
-
     }
 
     public void requestMove(Direction direction) {
@@ -86,6 +88,7 @@ public class Monster extends GameObject implements Movable {
             game.getWorld().setAffichage(true);
         }
     }
+
 
     public void update(long now) {
         if (moveRequested) {

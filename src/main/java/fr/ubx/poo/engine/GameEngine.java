@@ -23,10 +23,11 @@ import javafx.stage.Stage;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Timer;
+import java.util.TimerTask;
 
 
 public final class GameEngine {
-
     private static AnimationTimer gameLoop;
     private final String windowTitle;
     private final Game game;
@@ -73,6 +74,7 @@ public final class GameEngine {
         game.getWorld().forEach( (pos,d) -> sprites.add(SpriteFactory.createDecor(layer, pos, d)));
         spritePlayer = SpriteFactory.createPlayer(layer, player);
         spriteMonster = SpriteFactory.createMonster(layer,monster);
+        moveAutomatically();
 
     }
 
@@ -100,19 +102,15 @@ public final class GameEngine {
         }
         if (input.isMoveDown()) {
             player.requestMove(Direction.S);
-            monster.RandomMove();
         }
         if (input.isMoveLeft()) {
             player.requestMove(Direction.W);
-            monster.RandomMove();
         }
         if (input.isMoveRight()) {
             player.requestMove(Direction.E);
-            monster.RandomMove();
         }
         if (input.isMoveUp()) {
             player.requestMove(Direction.N);
-            monster.RandomMove();
         }
         if(input.isBomb()){
         }
@@ -120,6 +118,7 @@ public final class GameEngine {
 
         }
         input.clear();
+
     }
 
     private void showMessage(String msg, Color color) {
@@ -146,14 +145,23 @@ public final class GameEngine {
         player.update(now);
         monster.update(now);
 
-        if (player.isAlive() == false) {
+        if (!player.isAlive())  {
             gameLoop.stop();
             showMessage("C'est la loose ! ", Color.RED);
         }
-        if (player.isWinner() == true ) {
+        if (player.isWinner()) {
             gameLoop.stop();
             showMessage("Et c'est win ! ", Color.BLUE);
         }
+    }
+    private void moveAutomatically(){
+        Timer t = new Timer();
+        t.scheduleAtFixedRate(new TimerTask() {
+            @Override
+            public void run() {
+                monster.RandomMove();
+            }
+        }, 2000,1300);
     }
 
     private void render() {
