@@ -25,6 +25,9 @@ public final class ImageFactory {
             DIGIT_0, DIGIT_1, DIGIT_2, DIGIT_3, DIGIT_4,
             DIGIT_5, DIGIT_6, DIGIT_7, DIGIT_8, DIGIT_9,
     };
+    private final ImageResource[] bombState = new ImageResource[]{
+            BOMB1,BOMB2,BOMB3,BOMB4
+    };
 
 
     private ImageFactory() {
