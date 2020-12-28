@@ -32,14 +32,15 @@ public final class GameEngine {
     private final String windowTitle;
     private final Game game;
     private final Player player;
-    private Monster monster;
+    private Monster[] monster;
     private final List<Sprite> sprites = new ArrayList<>();
     private StatusBar statusBar;
     private Pane layer;
     private Input input;
     private Stage stage;
     private Sprite spritePlayer;
-    private Sprite spriteMonster;
+    private List<Sprite> spriteMonster=new ArrayList<>();
+    private int nbMonster;
 
     public GameEngine(final String windowTitle, Game game, final Stage stage) {
         this.windowTitle = windowTitle;
@@ -73,7 +74,10 @@ public final class GameEngine {
         // Create decor sprites
         game.getWorld().forEach( (pos,d) -> sprites.add(SpriteFactory.createDecor(layer, pos, d)));
         spritePlayer = SpriteFactory.createPlayer(layer, player);
-        spriteMonster = SpriteFactory.createMonster(layer,monster);
+        for(int i=0;i<nbMonster;i++) {
+        	spriteMonster.add(SpriteFactory.createMonster(layer,monster[i]));
+        }
+        
         moveAutomatically();
 
     }
@@ -143,8 +147,9 @@ public final class GameEngine {
 
     private void update(long now) {
         player.update(now);
-        monster.update(now);
-
+        for(int i=0;i<nbMonster;i++) {
+            monster[i].update(now);
+        }
         if (!player.isAlive())  {
             gameLoop.stop();
             showMessage("C'est la loose ! ", Color.RED);
@@ -159,7 +164,9 @@ public final class GameEngine {
         t.scheduleAtFixedRate(new TimerTask() {
             @Override
             public void run() {
-                monster.RandomMove();
+                for (int i = 0; i < nbMonster; i++) {
+                    monster[i].RandomMove();
+                }
             }
         }, 2000,1300);
     }
@@ -172,9 +179,8 @@ public final class GameEngine {
     		game.getWorld().setAffichage(false);
     	}
         sprites.forEach(Sprite::render);
-        
+        spriteMonster.forEach(Sprite::render);
         spritePlayer.render();
-        spriteMonster.render();
     }
 
     public void start() {

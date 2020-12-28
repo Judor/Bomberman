@@ -109,6 +109,25 @@ public class Player extends GameObject implements Movable {
         if(nextdec instanceof Bomberwoman ) {
             winner=true;
         }
+        if(nextdec instanceof Doornextclosed) {
+        	if (keys!=0 ) {
+        		game.getWorld().clear(nextPos);
+        		game.getWorld().setAffichage(true);
+        		game.getWorld().set(nextPos,new Doornextopened());
+        	}
+        		
+        	}
+         Monster[] monster =game.getMonster();
+         int nbMonster=game.getnbMonster();
+         for(int i=0;i<nbMonster;i++) {
+        	 if(monster[i].getPosition().equals(this.getPosition()))
+        	      lives=lives-1;
+        	 if (lives==0){
+                 alive=false;
+             }
+         }
+         
+        
         /* On veut voir si le joueur se dirige sur un monster. Si oui, on baisse sa vie de 1. Si elle est égale à 0, il meurt.
         if(nextnextPos instanceof Monster){
             if (lives==1){
@@ -118,8 +137,12 @@ public class Player extends GameObject implements Movable {
 
          */
     }
-
    
+
+	private Decor DoornextOpenned() {
+		// TODO Auto-generated method stub
+		return null;
+	}
 
 	public void update(long now) {
         if (moveRequested) {

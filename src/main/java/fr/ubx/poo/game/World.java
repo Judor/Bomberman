@@ -25,24 +25,44 @@ public class World {
     public Position findPlayer() throws PositionNotFoundException {
         for (int x = 0; x < dimension.width; x++) {
             for (int y = 0; y < dimension.height; y++) {
-                if (raw[y][x] == WorldEntity.Player) {
+                if (raw[y][x] == WorldEntity.Player || raw[y][x] == WorldEntity.DoorPrevOpened ) {
                     return new Position(x, y);
                 }
             }
         }
         throw new PositionNotFoundException("Player");
     }
-    public Position findMonster() throws PositionNotFoundException {
+    public Position[] findMonster(int a){
+    	Position[] pos=new Position[a];
+    	int i=0;
         for (int x = 0; x < dimension.width; x++) {
             for (int y = 0; y < dimension.height; y++) {
                 if (raw[y][x] == WorldEntity.Monster) {
-                    return new Position(x, y);
+                    pos[i]= new Position(x, y);
+                    i++;
                 }
             }
         }
-        throw new PositionNotFoundException("Monster");
+        return pos;
     }
-
+    
+    
+    
+    public int nbMonsters() {
+    	int i=0;
+        for (int x = 0; x < dimension.width; x++) {
+            for (int y = 0; y < dimension.height; y++) {
+                if (raw[y][x] == WorldEntity.Monster) {
+                   i++;
+                }
+            }
+        }
+        return i;
+    }
+    
+    
+    
+    
     public Decor get(Position position) {
         return grid.get(position);
     }
