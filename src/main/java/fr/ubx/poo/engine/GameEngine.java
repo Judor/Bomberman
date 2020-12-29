@@ -5,6 +5,7 @@
 package fr.ubx.poo.engine;
 
 import fr.ubx.poo.game.Direction;
+import fr.ubx.poo.game.World;
 import fr.ubx.poo.view.sprite.Sprite;
 import fr.ubx.poo.view.sprite.SpriteFactory;
 import fr.ubx.poo.game.Game;
@@ -73,12 +74,15 @@ public final class GameEngine {
         statusBar = new StatusBar(root, sceneWidth, sceneHeight, game);
         // Create decor sprites
         game.getWorld().forEach( (pos,d) -> sprites.add(SpriteFactory.createDecor(layer, pos, d)));
+        // Create Player sprites
         spritePlayer = SpriteFactory.createPlayer(layer, player);
+        // Create Monsters sprites
+        nbMonster=game.getWorld().nbMonsters();
         for(int i=0;i<nbMonster;i++) {
         	spriteMonster.add(SpriteFactory.createMonster(layer,monster[i]));
         }
         
-        moveAutomatically();
+        MonstersMoveAutomatically(); //Make Monsters move by themselves
 
     }
 
@@ -159,7 +163,7 @@ public final class GameEngine {
             showMessage("Et c'est win ! ", Color.BLUE);
         }
     }
-    private void moveAutomatically(){
+    private void MonstersMoveAutomatically(){
         Timer t = new Timer();
         t.scheduleAtFixedRate(new TimerTask() {
             @Override

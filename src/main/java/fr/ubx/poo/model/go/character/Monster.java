@@ -76,17 +76,16 @@ public class Monster extends GameObject implements Movable {
         Position nextnextPos = direction.nextPosition(nextPos);
         Decor nextdec = game.getWorld().get(nextPos);
         setPosition(nextPos);
-        /* On veut tester ici si le monstre est sur la meme case que la joueur
-        if (Entity.getPosition() = nextPos) {
-            player.setLives() = player.getLives()-1;
-        }
-        Si oui on baisse la vie du joueur.
-        */
+
         if( nextdec instanceof Heart ) {
             setLives(lives+1);
             game.getWorld().clear(nextPos);
             game.getWorld().setAffichage(true);
         }
+
+        Player player=game.getPlayer();
+        if (this.getPosition().equals(player.getPosition()))
+            player.getHurt();
     }
 
 

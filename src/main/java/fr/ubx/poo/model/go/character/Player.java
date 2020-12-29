@@ -64,86 +64,68 @@ public class Player extends GameObject implements Movable {
     public void doMove(Direction direction) {
         Position nextPos = direction.nextPosition(getPosition());
         Position nextnextPos = direction.nextPosition(nextPos);
-        Decor nextdec= game.getWorld().get(nextPos);
+        Decor nextdec = game.getWorld().get(nextPos);
         setPosition(nextPos);
-        
-        if(nextdec instanceof Heart ) {
-        	setLives(lives+1);
-        	game.getWorld().clear(nextPos);
-        	game.getWorld().setAffichage(true);
+
+        if (nextdec instanceof Heart) {
+            setLives(lives + 1);
+            game.getWorld().clear(nextPos);
+            game.getWorld().setAffichage(true);
         }
-        if(nextdec instanceof Key ) {
-        	setKeys(keys+1);
-        	game.getWorld().clear(nextPos);
-        	game.getWorld().setAffichage(true);
+        if (nextdec instanceof Key) {
+            setKeys(keys + 1);
+            game.getWorld().clear(nextPos);
+            game.getWorld().setAffichage(true);
         }
-        if(nextdec instanceof Bombnumberdec ) {
-        	if(bombs>0) {
-	        	setBombs(bombs-1);
-	        	game.getWorld().clear(nextPos);
-	        	game.getWorld().setAffichage(true);
-        	}
-        }
-        if(nextdec instanceof Bombnumberinc ) {
-        	setBombs(bombs+1);
-        	game.getWorld().clear(nextPos);
-        	game.getWorld().setAffichage(true);
-        }
-        if(nextdec instanceof Bombrangeinc  ) {
-        	setRanges(ranges+1);
-        	game.getWorld().clear(nextPos);
-        	game.getWorld().setAffichage(true);
-        }
-        if(nextdec instanceof Bombrangedec) {
-        	if(ranges>1) {
-        		setRanges(ranges-1);
-            	game.getWorld().clear(nextPos);
-            	game.getWorld().setAffichage(true);
-        	}
-        }
-        if(nextdec instanceof Box  ) {
-         	game.getWorld().clear(nextPos);
-         	game.getWorld().setAffichage(true);
-         	game.getWorld().set(nextnextPos, new Box());
-         }
-        if(nextdec instanceof Bomberwoman ) {
-            winner=true;
-        }
-        if(nextdec instanceof Doornextclosed) {
-        	if (keys!=0 ) {
-        		game.getWorld().clear(nextPos);
-        		game.getWorld().setAffichage(true);
-        		game.getWorld().set(nextPos,new Doornextopened());
-        	}
-        		
-        	}
-         Monster[] monster =game.getMonster();
-         int nbMonster=game.getnbMonster();
-         for(int i=0;i<nbMonster;i++) {
-        	 if(monster[i].getPosition().equals(this.getPosition()))
-        	      lives=lives-1;
-        	 if (lives==0){
-                 alive=false;
-             }
-         }
-         
-        
-        /* On veut voir si le joueur se dirige sur un monster. Si oui, on baisse sa vie de 1. Si elle est égale à 0, il meurt.
-        if(nextnextPos instanceof Monster){
-            if (lives==1){
-                alive=false;
+        if (nextdec instanceof Bombnumberdec) {
+            if (bombs > 0) {
+                setBombs(bombs - 1);
+                game.getWorld().clear(nextPos);
+                game.getWorld().setAffichage(true);
             }
-            lives=lives-1;
+        }
+        if (nextdec instanceof Bombnumberinc) {
+            setBombs(bombs + 1);
+            game.getWorld().clear(nextPos);
+            game.getWorld().setAffichage(true);
+        }
+        if (nextdec instanceof Bombrangeinc) {
+            setRanges(ranges + 1);
+            game.getWorld().clear(nextPos);
+            game.getWorld().setAffichage(true);
+        }
+        if (nextdec instanceof Bombrangedec) {
+            if (ranges > 1) {
+                setRanges(ranges - 1);
+                game.getWorld().clear(nextPos);
+                game.getWorld().setAffichage(true);
+            }
+        }
+        if (nextdec instanceof Box) {
+            game.getWorld().clear(nextPos);
+            game.getWorld().setAffichage(true);
+            game.getWorld().set(nextnextPos, new Box());
+        }
+        if (nextdec instanceof Bomberwoman) {
+            winner = true;
+        }
+        if (nextdec instanceof Doornextclosed) {
+            if (keys != 0) {
+                game.getWorld().clear(nextPos);
+                game.getWorld().setAffichage(true);
+                game.getWorld().set(nextPos, new Doornextopened());
+            }
 
-         */
+        }
+
+        Monster[] monster = game.getMonster();
+        int nbMonster = game.getnbMonster();
+        for (int i = 0; i < nbMonster; i++) {
+            if (monster[i].getPosition().equals(this.getPosition()))
+                getHurt();
+
+        }
     }
-   
-
-	private Decor DoornextOpenned() {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
 	public void update(long now) {
         if (moveRequested) {
             if (canMove(direction)) {
@@ -151,6 +133,13 @@ public class Player extends GameObject implements Movable {
             }
         }
         moveRequested = false;
+    }
+
+    public void getHurt(){
+        lives=lives-1;
+        if (lives == 0) {
+            alive = false;
+        }
     }
 
     public boolean isWinner() {
