@@ -24,7 +24,7 @@ public class Game {
     public int initPlayerLives;
     private int nbMonster;
     private int levels;
-    private int level=2;
+    private int level=1;
     private String prefix;
     
 
@@ -109,7 +109,7 @@ public class Game {
         return this.monster;
     }
 
-    public int getnbMonster(){
+    public int getNbMonster(){
         return this.nbMonster;
     }
     

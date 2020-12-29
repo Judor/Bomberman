@@ -55,9 +55,8 @@ public class Player extends GameObject implements Movable {
     	if (! (Pos.inside(game.getWorld().dimension)) || nextdec instanceof Stone  || nextdec instanceof Tree){
     	  return false;
     	}
-    	if (nextdec instanceof Box) {
+    	if (nextdec instanceof Box)
     		return nextnextPos.inside(game.getWorld().dimension) && game.getWorld().isEmpty(nextnextPos);
-    	}
         return true;
     }
 
@@ -119,7 +118,7 @@ public class Player extends GameObject implements Movable {
         }
 
         Monster[] monster = game.getMonster();
-        int nbMonster = game.getnbMonster();
+        int nbMonster = game.getNbMonster();
         for (int i = 0; i < nbMonster; i++) {
             if (monster[i].getPosition().equals(this.getPosition()))
                 getHurt();
@@ -127,19 +126,17 @@ public class Player extends GameObject implements Movable {
         }
     }
 	public void update(long now) {
-        if (moveRequested) {
-            if (canMove(direction)) {
+        if (moveRequested)
+            if (canMove(direction))
                 doMove(direction);
-            }
-        }
         moveRequested = false;
     }
 
+
     public void getHurt(){
         lives=lives-1;
-        if (lives == 0) {
+        if (lives == 0)
             alive = false;
-        }
     }
 
     public boolean isWinner() {

@@ -55,9 +55,8 @@ public class Monster extends GameObject implements Movable {
     }
 
     public void requestMove(Direction direction) {
-        if (direction != this.direction) {
+        if (direction != this.direction)
             this.direction = direction;
-        }
         moveRequested = true;
     }
 
@@ -82,7 +81,6 @@ public class Monster extends GameObject implements Movable {
             game.getWorld().clear(nextPos);
             game.getWorld().setAffichage(true);
         }
-
         Player player=game.getPlayer();
         if (this.getPosition().equals(player.getPosition()))
             player.getHurt();
@@ -90,11 +88,9 @@ public class Monster extends GameObject implements Movable {
 
 
     public void update(long now) {
-        if (moveRequested) {
-            if (canMove(direction)) {
+        if (moveRequested)
+            if (canMove(direction))
                 doMove(direction);
-            }
-        }
         moveRequested = false;
     }
 }

@@ -6,6 +6,7 @@ package fr.ubx.poo.engine;
 
 import fr.ubx.poo.game.Direction;
 import fr.ubx.poo.game.World;
+import fr.ubx.poo.model.decor.Doornextopened;
 import fr.ubx.poo.view.sprite.Sprite;
 import fr.ubx.poo.view.sprite.SpriteFactory;
 import fr.ubx.poo.game.Game;
@@ -123,7 +124,8 @@ public final class GameEngine {
         if(input.isBomb()){
         }
         if(input.isKey()){
-
+            if (game.getWorld().get(player.getPosition()) instanceof Doornextopened)
+                stage.close();
         }
         input.clear();
 
@@ -151,13 +153,13 @@ public final class GameEngine {
 
     private void update(long now) {
         player.update(now);
-        for(int i=0;i<nbMonster;i++) {
+        for (int i = 0; i < nbMonster; i++)
             monster[i].update(now);
-        }
-        if (!player.isAlive())  {
+
+        if (!player.isAlive()){
             gameLoop.stop();
-            showMessage("C'est la loose ! ", Color.RED);
-        }
+        showMessage("C'est la loose ! ", Color.RED);
+    }
         if (player.isWinner()) {
             gameLoop.stop();
             showMessage("Et c'est win ! ", Color.BLUE);
