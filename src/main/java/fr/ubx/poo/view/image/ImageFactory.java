@@ -26,6 +26,11 @@ public final class ImageFactory {
             DIGIT_5, DIGIT_6, DIGIT_7, DIGIT_8, DIGIT_9,
     };
 
+    private final ImageResource[] Bombs = new ImageResource[]{
+            BOMB_4, BOMB_3, BOMB_2, BOMB_1
+    };
+
+
 
     private ImageFactory() {
         images = new Image[ImageResource.values().length];
@@ -64,7 +69,9 @@ public final class ImageFactory {
     public Image getMonster(Direction direction) {
         return get(Mondirections[direction.ordinal()]);
     }
-
+    public Image getBomb(int i){
+        return get(Bombs[i]);
+    }
 
     /**
      * Holder

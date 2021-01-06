@@ -12,10 +12,10 @@ import fr.ubx.poo.game.Game;
 
 
 public class Monster extends GameObject implements Movable {
-    private final boolean alive = true;
     Direction direction;
     private int lives=1;
     private boolean moveRequested = false;
+    private boolean alive=true;
 
 
     public Monster(Game game, Position position){
@@ -33,7 +33,6 @@ public class Monster extends GameObject implements Movable {
     public Direction getDirection() {
         return direction;
     }
-
 
 
     public void RandomMove(){
@@ -82,6 +81,7 @@ public class Monster extends GameObject implements Movable {
             game.getWorld().setAffichage(true);
         }
         Player player=game.getPlayer();
+
         if (this.getPosition().equals(player.getPosition()))
             player.getHurt();
     }
@@ -92,6 +92,11 @@ public class Monster extends GameObject implements Movable {
             if (canMove(direction))
                 doMove(direction);
         moveRequested = false;
+    }
+    public void getHurt(){
+        lives=lives-1;
+        if (lives==0)
+            alive=false;
     }
 }
 

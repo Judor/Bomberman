@@ -17,10 +17,9 @@ public class Player extends GameObject implements Movable {
     Direction direction;
     private boolean moveRequested = false;
     private int lives = 1;
-    private int ranges = 1;
-    private int bombs = 0;
+    private int range = 1;
+    private int bombs = 1;
     private int keys = 0;
-    
     private boolean winner;
 
     public Player(Game game, Position position) {
@@ -89,13 +88,13 @@ public class Player extends GameObject implements Movable {
             game.getWorld().setAffichage(true);
         }
         if (nextdec instanceof Bombrangeinc) {
-            setRanges(ranges + 1);
+            setRange(range + 1);
             game.getWorld().clear(nextPos);
             game.getWorld().setAffichage(true);
         }
         if (nextdec instanceof Bombrangedec) {
-            if (ranges > 1) {
-                setRanges(ranges - 1);
+            if (range > 1) {
+                setRange(range - 1);
                 game.getWorld().clear(nextPos);
                 game.getWorld().setAffichage(true);
             }
@@ -114,7 +113,6 @@ public class Player extends GameObject implements Movable {
                 game.getWorld().setAffichage(true);
                 game.getWorld().set(nextPos, new Doornextopened());
             }
-
         }
 
         Monster[] monster = game.getMonster();
@@ -138,6 +136,12 @@ public class Player extends GameObject implements Movable {
         if (lives == 0)
             alive = false;
     }
+    public void decBomb(){
+        this.bombs=this.bombs-1;
+    }
+    public void incBomb(){
+        this.bombs+=1;
+    }
 
     public boolean isWinner() {
         return winner;
@@ -147,12 +151,12 @@ public class Player extends GameObject implements Movable {
         return alive;
     }
 
-	public int getRanges() {
-		return ranges;
+	public int getRange() {
+		return range;
 	}
 
-	public void setRanges(int ranges) {
-		this.ranges = ranges;
+	public void setRange(int ranges) {
+		this.range = ranges;
 	}
 
 	public int getBombs() {

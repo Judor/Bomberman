@@ -51,4 +51,8 @@ public final class SpriteFactory {
     public static Sprite createMonster(Pane layer, Monster monster) {
         return new SpriteMonster(layer, monster);
     }
+    
+    public static Sprite createBomb(Pane layer, Bomb bomb, int state){
+        return new SpriteBomb(layer,bomb,state);
+    }
 }

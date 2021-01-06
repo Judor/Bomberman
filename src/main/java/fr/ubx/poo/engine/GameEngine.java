@@ -34,6 +34,7 @@ public final class GameEngine {
     private final String windowTitle;
     private final Game game;
     private final Player player;
+    private Bomb bomb;
     private Monster[] monster;
     private final List<Sprite> sprites = new ArrayList<>();
     private StatusBar statusBar;
@@ -41,8 +42,10 @@ public final class GameEngine {
     private Input input;
     private Stage stage;
     private Sprite spritePlayer;
+    private Sprite spriteBomb;
     private List<Sprite> spriteMonster=new ArrayList<>();
     private int nbMonster;
+    private int nbBombs;
 
     public GameEngine(final String windowTitle, Game game, final Stage stage) {
         this.windowTitle = windowTitle;
@@ -122,6 +125,12 @@ public final class GameEngine {
             player.requestMove(Direction.N);
         }
         if(input.isBomb()){
+            if (player.getBombs()>0){
+                player.decBomb();
+                bomb= new Bomb(game,player.getPosition());
+                spriteBomb=SpriteFactory.createBomb(layer,bomb,0);
+                nbBombs+=1;
+            }
         }
         if(input.isKey()){
             if (game.getWorld().get(player.getPosition()) instanceof Doornextopened)
@@ -153,9 +162,9 @@ public final class GameEngine {
 
     private void update(long now) {
         player.update(now);
-        for (int i = 0; i < nbMonster; i++)
+        for (int i = 0; i < nbMonster; i++) {
             monster[i].update(now);
-
+        }
         if (!player.isAlive()){
             gameLoop.stop();
         showMessage("C'est la loose ! ", Color.RED);
@@ -165,6 +174,7 @@ public final class GameEngine {
             showMessage("Et c'est win ! ", Color.BLUE);
         }
     }
+
     private void MonstersMoveAutomatically(){
         Timer t = new Timer();
         t.scheduleAtFixedRate(new TimerTask() {
@@ -187,9 +197,16 @@ public final class GameEngine {
         sprites.forEach(Sprite::render);
         spriteMonster.forEach(Sprite::render);
         spritePlayer.render();
+        if (nbBombs>0){
+            spriteBomb.render();
+        }
+
     }
 
     public void start() {
         gameLoop.start();
     }
+
+
+
 }
