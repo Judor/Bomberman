@@ -137,9 +137,10 @@ public final class GameEngine {
             }
         }
         if(input.isKey()){
-            if (game.getWorld().get(player.getPosition()) instanceof Doornextopened)
-                stage.close();
+        	player.doorOpening();
         }
+        
+        
         input.clear();
 
     }

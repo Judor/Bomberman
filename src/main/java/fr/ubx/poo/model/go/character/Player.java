@@ -51,7 +51,7 @@ public class Player extends GameObject implements Movable {
     	Position Pos = direction.nextPosition(getPosition());
         Position nextnextPos = direction.nextPosition(Pos);
     	Decor nextdec= game.getWorld().get(Pos);
-    	if (! (Pos.inside(game.getWorld().dimension)) || nextdec instanceof Stone  || nextdec instanceof Tree){
+    	if (! (Pos.inside(game.getWorld().dimension)) || nextdec instanceof Stone  || nextdec instanceof Tree || nextdec instanceof Doornextclosed){
     	  return false;
     	}
     	if (nextdec instanceof Box)
@@ -107,13 +107,7 @@ public class Player extends GameObject implements Movable {
         if (nextdec instanceof Bomberwoman) {
             winner = true;
         }
-        if (nextdec instanceof Doornextclosed) {
-            if (keys != 0) {
-                game.getWorld().clear(nextPos);
-                game.getWorld().setAffichage(true);
-                game.getWorld().set(nextPos, new Doornextopened());
-            }
-        }
+        
 
         Monster[] monster = game.getMonster();
         int nbMonster = game.getNbMonster();
@@ -138,6 +132,23 @@ public class Player extends GameObject implements Movable {
         if (lives == 0)
             alive = false;
     }
+    
+    
+    public void doorOpening() {
+    	Position nextpos = direction.nextPosition(getPosition());
+    	Decor nextdec = game.getWorld().get(nextpos);
+    	if (nextdec instanceof Doornextclosed) {
+            if (keys != 0) {
+                game.getWorld().clear(nextpos);
+                game.getWorld().setAffichage(true);
+                game.getWorld().set(nextpos, new Doornextopened());
+                keys--;
+            }
+        }
+    }
+    
+    
+    
     public void decBomb(){
         this.bombs=this.bombs-1;
     }
