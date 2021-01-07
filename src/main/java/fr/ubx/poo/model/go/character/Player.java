@@ -51,11 +51,11 @@ public class Player extends GameObject implements Movable {
     	Position Pos = direction.nextPosition(getPosition());
         Position nextnextPos = direction.nextPosition(Pos);
     	Decor nextdec= game.getWorld().get(Pos);
-    	if (! (Pos.inside(game.getWorld().dimension)) || nextdec instanceof Stone  || nextdec instanceof Tree || nextdec instanceof Doornextclosed){
+    	if (! (Pos.inside(game.getWorld().getDimension())) || nextdec instanceof Stone  || nextdec instanceof Tree || nextdec instanceof Doornextclosed){
     	  return false;
     	}
     	if (nextdec instanceof Box)
-    		return nextnextPos.inside(game.getWorld().dimension) && game.getWorld().isEmpty(nextnextPos);
+    		return nextnextPos.inside(game.getWorld().getDimension()) && game.getWorld().isEmpty(nextnextPos);
         return true;
     }
 
@@ -104,6 +104,19 @@ public class Player extends GameObject implements Movable {
             game.getWorld().setAffichage(true);
             game.getWorld().set(nextnextPos, new Box());
         }
+        
+        if (nextdec instanceof Doornextopened) {
+        	game.setChangelevel(true);
+        	game.getWorld().setLevelUp(true);
+        	game.setLevel(game.getLevel()+1);
+        }
+        
+        if (nextdec instanceof Doorprevopened) {
+        	game.setChangelevel(true);
+        	game.getWorld().setLevelP(true);
+        	game.setLevel(game.getLevel()-1);
+        }
+        
         if (nextdec instanceof Bomberwoman) {
             winner = true;
         }

@@ -11,6 +11,7 @@ import fr.ubx.poo.view.sprite.Sprite;
 import fr.ubx.poo.view.sprite.SpriteBomb;
 import fr.ubx.poo.view.sprite.SpriteFactory;
 import fr.ubx.poo.game.Game;
+import fr.ubx.poo.game.PositionNotFoundException;
 import fr.ubx.poo.model.go.character.*;
 import javafx.animation.AnimationTimer;
 import javafx.application.Platform;
@@ -64,8 +65,8 @@ public final class GameEngine {
         Group root = new Group();
         layer = new Pane();
 
-        int height = game.getWorld().dimension.height;
-        int width = game.getWorld().dimension.width;
+        int height = game.getWorld().getDimension().height;
+        int width = game.getWorld().getDimension().width;
         int sceneWidth = width * Sprite.size;
         int sceneHeight = height * Sprite.size;
         Scene scene = new Scene(root, sceneWidth, sceneHeight + StatusBar.height);
@@ -79,6 +80,15 @@ public final class GameEngine {
         input = new Input(scene);
         root.getChildren().add(layer);
         statusBar = new StatusBar(root, sceneWidth, sceneHeight, game);
+        
+        try {
+			player.setPosition(game.getWorld().findPlayer());
+		} catch (PositionNotFoundException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+			System.out.println("aaaaaaaaaaaaaaaa");
+		}
+        
         // Create decor sprites
         game.getWorld().forEach( (pos,d) -> sprites.add(SpriteFactory.createDecor(layer, pos, d)));
         // Create Player sprites
@@ -166,6 +176,13 @@ public final class GameEngine {
 
 
     private void update(long now) {
+    	if (game.isChangelevel()) {
+    		
+    		game.setChangelevel(false);
+    		initialize(stage,game);
+    	}
+    	
+    	
         player.update(now);
         for (int i = 0; i < nbMonster; i++) {
             monster[i].update(now);
@@ -193,7 +210,8 @@ public final class GameEngine {
         }, 2000,1300);
     }
 
-    private void render() {
+    private void render() {    	
+    	
     	if(this.game.getWorld().isAffichage()) {
     		sprites.forEach(Sprite::remove);
     		sprites.clear();

@@ -11,6 +11,8 @@ import java.io.FileInputStream;
 import java.io.FileReader;
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
 import java.util.Properties;
 
@@ -23,15 +25,16 @@ public class Game {
     private final String worldPath;
     public int initPlayerLives;
     private int nbMonster;
+    private int level=0;
     private int levels;
-    private int level=1;
     private String prefix;
+    private boolean changelevel=false;
     
 
     public Game(String worldPath) {
         this.worldPath = worldPath;
         loadConfig(worldPath);
-        world=new World(loadConf(worldPath));
+        world=new World(loadGame(worldPath),levels);
         Position positionPlayer = null;
         Position[] positionMonster=null;
         nbMonster=world.nbMonsters();
@@ -66,7 +69,19 @@ public class Game {
             System.err.println("Error loading configuration");
         }
     }
-    private WorldEntity[][] loadConf(String path) {
+    
+    
+    private List<WorldEntity[][]> loadGame(String path){
+    	List<WorldEntity[][]> game = new ArrayList<>();
+    	for (int i=1; i<levels+1; i++) {
+    		game.add(loadConf(path,i));
+    	}
+    	return game;
+    }
+    
+    
+    
+    private WorldEntity[][] loadConf(String path, int level) {
     	 WorldEntity[][] World = null ;
         try  { 
         	BufferedReader fd = new BufferedReader(new FileReader(path+"/" +prefix+level+".txt"));
@@ -92,7 +107,7 @@ public class Game {
     		}
     	    fd.close();
         } catch (IOException ex) {
-            System.err.println("Error loading configuration");
+            System.err.println("Error loading level");
         }
        
         return World;
@@ -112,5 +127,23 @@ public class Game {
     public int getNbMonster(){
         return this.nbMonster;
     }
+
+	public boolean isChangelevel() {
+		return changelevel;
+	}
+
+	public void setChangelevel(boolean changelevel) {
+		this.changelevel = changelevel;
+	}
+	
+	public int getLevel() {
+		return level;
+	}
+	
+	public void setLevel(int l) {
+		this.getWorld().setLevelactual(l);
+		this.level=l;
+		
+	}
 
 }
