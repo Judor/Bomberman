@@ -8,6 +8,7 @@ import fr.ubx.poo.game.Direction;
 import fr.ubx.poo.game.World;
 import fr.ubx.poo.model.decor.Doornextopened;
 import fr.ubx.poo.view.sprite.Sprite;
+import fr.ubx.poo.view.sprite.SpriteBomb;
 import fr.ubx.poo.view.sprite.SpriteFactory;
 import fr.ubx.poo.game.Game;
 import fr.ubx.poo.model.go.character.*;
@@ -34,18 +35,20 @@ public final class GameEngine {
     private final String windowTitle;
     private final Game game;
     private final Player player;
-    private Bomb bomb;
     private Monster[] monster;
+    private Bomb bomb;
     private final List<Sprite> sprites = new ArrayList<>();
     private StatusBar statusBar;
     private Pane layer;
     private Input input;
     private Stage stage;
     private Sprite spritePlayer;
-    private Sprite spriteBomb;
+    private List<SpriteBomb> spriteBomb=new ArrayList<>();
     private List<Sprite> spriteMonster=new ArrayList<>();
     private int nbMonster;
-    private int nbBombs;
+    private int nbBomb=0;
+
+
 
     public GameEngine(final String windowTitle, Game game, final Stage stage) {
         this.windowTitle = windowTitle;
@@ -127,9 +130,10 @@ public final class GameEngine {
         if(input.isBomb()){
             if (player.getBombs()>0){
                 player.decBomb();
-                bomb= new Bomb(game,player.getPosition());
-                spriteBomb=SpriteFactory.createBomb(layer,bomb,0);
-                nbBombs+=1;
+                nbBomb+=1;
+                bomb=new Bomb(game,player.getPosition());
+                spriteBomb.add((SpriteBomb) SpriteFactory.createBomb(layer,bomb));
+
             }
         }
         if(input.isKey()){
@@ -165,13 +169,14 @@ public final class GameEngine {
         for (int i = 0; i < nbMonster; i++) {
             monster[i].update(now);
         }
+
         if (!player.isAlive()){
             gameLoop.stop();
-        showMessage("C'est la loose ! ", Color.RED);
+        showMessage("You looser ! ", Color.RED);
     }
         if (player.isWinner()) {
             gameLoop.stop();
-            showMessage("Et c'est win ! ", Color.BLUE);
+            showMessage("Congrats,it's a wrap ! ", Color.BLUE);
         }
     }
 
@@ -204,9 +209,13 @@ public final class GameEngine {
         }
         spriteMonster.forEach(Sprite::render);
         spritePlayer.render();
-        if (nbBombs>0){
-            spriteBomb.render();
+        for(int i=0;i<spriteBomb.size();i++){
+            if (spriteBomb.get(i).getBoom()){
+                spriteBomb.get(i).remove();
+                spriteBomb.remove(i);
+            }
         }
+        spriteBomb.forEach(Sprite::render);
     }
 
     public void start() {

@@ -51,12 +51,15 @@ public class Bomb extends GameObject {
                     Monster[] monster = game.getMonster();
                     int nbMonster = game.getNbMonster();
                     for (int m = 0; m < nbMonster; m++) {
-                        if (monster[m].getPosition().equals(nextPos))
+                        if (monster[m].getPosition().equals(nextPos)) {
                             monster[m].getHurt();
+                        }
                     }
                 }
             }
             game.getPlayer().incBomb();
+            game.getWorld().clear(getPosition());
+            game.getWorld().setAffichage(true);
         }
     };
 

@@ -31,7 +31,7 @@ public abstract class Sprite {
 
     public abstract Position getPosition();
 
-    public final void render() {
+    public final void  render() {
         if (imageView != null) {
             remove();
         }
@@ -46,4 +46,6 @@ public abstract class Sprite {
         layer.getChildren().remove(imageView);
         imageView = null;
     }
+
+
 }

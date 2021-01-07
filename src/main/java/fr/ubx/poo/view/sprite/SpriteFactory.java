@@ -52,7 +52,7 @@ public final class SpriteFactory {
         return new SpriteMonster(layer, monster);
     }
     
-    public static Sprite createBomb(Pane layer, Bomb bomb, int state){
-        return new SpriteBomb(layer,bomb,state);
+    public static Sprite createBomb(Pane layer, Bomb bomb){
+        return new SpriteBomb(layer,bomb);
     }
 }
