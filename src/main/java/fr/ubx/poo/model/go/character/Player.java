@@ -119,7 +119,9 @@ public class Player extends GameObject implements Movable {
         int nbMonster = game.getNbMonster();
         for (int i = 0; i < nbMonster; i++) {
             if (monster[i].getPosition().equals(this.getPosition()))
+                if (monster[i].isAlive()) {
                 getHurt();
+            }
 
         }
     }

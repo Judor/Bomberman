@@ -195,12 +195,18 @@ public final class GameEngine {
     		game.getWorld().setAffichage(false);
     	}
         sprites.forEach(Sprite::render);
+        for (int i = 0; i < nbMonster; i++) {
+            if (!monster[i].isAlive()){
+                spriteMonster.get(i).remove();
+                spriteMonster.remove(i);
+                nbMonster=nbMonster-1;
+            }
+        }
         spriteMonster.forEach(Sprite::render);
         spritePlayer.render();
         if (nbBombs>0){
             spriteBomb.render();
         }
-
     }
 
     public void start() {

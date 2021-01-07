@@ -70,20 +70,23 @@ public class Monster extends GameObject implements Movable {
     }
 
     public void doMove(Direction direction){
-        Position nextPos = direction.nextPosition(getPosition());
-        Position nextnextPos = direction.nextPosition(nextPos);
-        Decor nextdec = game.getWorld().get(nextPos);
-        setPosition(nextPos);
+        if (alive){
+            Position nextPos = direction.nextPosition(getPosition());
+            Position nextnextPos = direction.nextPosition(nextPos);
+            Decor nextdec = game.getWorld().get(nextPos);
+            setPosition(nextPos);
 
-        if( nextdec instanceof Heart ) {
-            setLives(lives+1);
-            game.getWorld().clear(nextPos);
-            game.getWorld().setAffichage(true);
+            if( nextdec instanceof Heart ) {
+                setLives(lives+1);
+                game.getWorld().clear(nextPos);
+                game.getWorld().setAffichage(true);
+            }
+            Player player=game.getPlayer();
+
+            if (this.getPosition().equals(player.getPosition())) {
+                player.getHurt();
+            }
         }
-        Player player=game.getPlayer();
-
-        if (this.getPosition().equals(player.getPosition()))
-            player.getHurt();
     }
 
 
@@ -93,10 +96,16 @@ public class Monster extends GameObject implements Movable {
                 doMove(direction);
         moveRequested = false;
     }
+
     public void getHurt(){
         lives=lives-1;
-        if (lives==0)
-            alive=false;
+        if (lives==0) {
+            alive = false;
+        }
+    }
+
+    public boolean isAlive() {
+        return alive;
     }
 }
 

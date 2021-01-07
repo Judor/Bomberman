@@ -112,6 +112,5 @@ public class Game {
     public int getNbMonster(){
         return this.nbMonster;
     }
-    
-   
+
 }
