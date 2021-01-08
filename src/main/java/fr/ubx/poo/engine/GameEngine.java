@@ -213,7 +213,7 @@ public final class GameEngine {
             	monsters.forEach(monster -> monster.RandomMove());
                 
             }
-        }, 2000,1300);
+        }, 0, (3- game.getLevel())*1000);
     }
 
     private void render() {    	
