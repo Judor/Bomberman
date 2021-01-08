@@ -108,13 +108,13 @@ public class Player extends GameObject implements Movable {
         }
         
         if (nextdec instanceof Doornextopened) {
-        	game.setChangelevel(true);
+        	game.setChangedLevel(true);
         	game.getWorld().setLevelUp(true);
         	game.setLevel(game.getLevel()+1);
         }
         
         if (nextdec instanceof Doorprevopened) {
-        	game.setChangelevel(true);
+        	game.setChangedLevel(true);
         	game.getWorld().setLevelP(true);
         	game.setLevel(game.getLevel()-1);
         }

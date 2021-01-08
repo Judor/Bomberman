@@ -13,6 +13,7 @@ import fr.ubx.poo.view.sprite.SpriteFactory;
 import fr.ubx.poo.game.Game;
 import fr.ubx.poo.game.PositionNotFoundException;
 import fr.ubx.poo.model.go.character.*;
+import fr.ubx.poo.view.sprite.SpriteMonster;
 import javafx.animation.AnimationTimer;
 import javafx.application.Platform;
 import javafx.scene.Group;
@@ -46,7 +47,8 @@ public final class GameEngine {
     private Sprite spritePlayer;
     private List<SpriteBomb> spriteBomb=new ArrayList<>();
     private List<Sprite> spriteMonster=new ArrayList<>();
-    private int nbBomb=0;
+    private boolean monsterDead=false;
+    private int iDeadMonster=0;
 
 
 
@@ -78,29 +80,27 @@ public final class GameEngine {
 
         input = new Input(scene);
         root.getChildren().add(layer);
-        statusBar = new StatusBar(root, sceneWidth, sceneHeight, game);
+        statusBar = new StatusBar(root, sceneWidth, sceneHeight);
         
         try {
 			player.setPosition(game.getWorld().findPlayer());
-		} catch (PositionNotFoundException e) {
+		} catch (PositionNotFoundException positionNotFoundException) {
 			// TODO Auto-generated catch block
-			e.printStackTrace();
-			System.out.println("aaaaaaaaaaaaaaaa");
+			positionNotFoundException.printStackTrace();
+			System.out.println("No Player found !");
 		}
-        
-        monsters.clear();
-        monsters.addAll(game.getWorld().findMonster(game));
-        
         // Create decor sprites
         game.getWorld().forEach( (pos,d) -> sprites.add(SpriteFactory.createDecor(layer, pos, d)));
+
         // Create Player sprites
         spritePlayer = SpriteFactory.createPlayer(layer, player);
-        // Create Monsters sprites
-        monsters.forEach(monster -> spriteMonster.add(SpriteFactory.createMonster(layer, monster)));
-        
-        
-        MonstersMoveAutomatically(); //Make Monsters move by themselves
 
+        // Create Monsters sprites
+        monsters.clear();
+        monsters.addAll(game.getWorld().findMonster(game));
+        spriteMonster.clear();
+        monsters.forEach(monster -> spriteMonster.add(SpriteFactory.createMonster(layer, monster)));
+        MonstersMoveAutomatically(); //Make Monsters move by themselves
     }
 
     protected final void buildAndSetGameLoop() {
@@ -140,19 +140,14 @@ public final class GameEngine {
         if(input.isBomb()){
             if (player.getBombs()>0){
                 player.decBomb();
-                nbBomb+=1;
                 bomb=new Bomb(game,player.getPosition());
                 spriteBomb.add((SpriteBomb) SpriteFactory.createBomb(layer,bomb));
-
             }
         }
         if(input.isKey()){
         	player.doorOpening();
         }
-        
-        
         input.clear();
-
     }
 
     private void showMessage(String msg, Color color) {
@@ -174,34 +169,28 @@ public final class GameEngine {
         }.start();
     }
 
-
     private void update(long now) {
-    	if (game.isChangelevel()) {
-    		
-    		game.setChangelevel(false);
+    	if (game.isChangedLevel()) {
+    		game.setChangedLevel(false);
     		initialize(stage,game);
     	}
-    	
-    	
         player.update(now);
-        monsters.forEach(monster  -> monster.update(now));
-        
-        
-        
+        monsters.forEach(monster -> monster.update(now));
         if (!player.isAlive()){
             gameLoop.stop();
         showMessage("You looser ! ", Color.RED);
-    }
+        }
+        iDeadMonster=0;
         for (Monster monster : monsters) {
+            iDeadMonster+=1;
         	if (monster.isAlive()==false){
+        	    monsterDead=true;
         		monsters.remove(monster);
         	}
         }
-        
-        
         if (player.isWinner()) {
             gameLoop.stop();
-            showMessage("Congrats,it's a wrap ! ", Color.BLUE);
+            showMessage("Congrats! ", Color.BLUE);
         }
     }
 
@@ -211,13 +200,11 @@ public final class GameEngine {
             @Override
             public void run() {
             	monsters.forEach(monster -> monster.RandomMove());
-                
             }
         }, 0, (3- game.getLevel())*1000);
     }
 
-    private void render() {    	
-    	
+    private void render() {
     	if(this.game.getWorld().isAffichage()) {
     		sprites.forEach(Sprite::remove);
     		sprites.clear();
@@ -225,11 +212,13 @@ public final class GameEngine {
     		game.getWorld().setAffichage(false);
     	}
         sprites.forEach(Sprite::render);
-        
-        for (Monster monster : monsters) {
-        	if (monster.isAlive()==false){
-        		spriteMonster.forEach(Sprite::remove);
-        	}
+        if (monsterDead) {
+            for (int i = 0; i < spriteMonster.size(); i++) {
+                if(i==iDeadMonster){
+                    spriteMonster.get(i).remove();
+                    spriteMonster.remove(i);
+                }
+            }
         }
         spriteMonster.forEach(Sprite::render);
         spritePlayer.render();
@@ -240,13 +229,11 @@ public final class GameEngine {
             }
         }
         spriteBomb.forEach(Sprite::render);
-        
     }
 
     public void start() {
         gameLoop.start();
     }
-
 
 
 }

@@ -27,10 +27,6 @@ public enum WorldEntity {
     ;
 
 
-    private char getCode() {
-        return code;
-    }
-
     private final char code;
 
     WorldEntity(char code) {

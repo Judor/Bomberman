@@ -4,7 +4,6 @@
 
 package fr.ubx.poo.game;
 
-import java.util.Random;
 
 public enum Direction {
     N {

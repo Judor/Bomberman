@@ -20,9 +20,9 @@ public class World {
     private boolean affichage;
     private boolean levelP=false;
     private boolean levelUp=false;
-    private int levelactual = 0;
+    private int actualLevel = 0;
 
-    public World(List<WorldEntity[][]> raw, int levels) {
+    public World(List<WorldEntity[][]> raw) {
     	for (WorldEntity[][] raw1 : raw) {
     		this.raw.add(raw1);
     		Dimension d = new Dimension(raw1.length, raw1[0].length);
@@ -31,10 +31,7 @@ public class World {
     	}
         
     }
-    
-    public World(WorldEntity[][] mapentities) {
-    	
-    }
+
 
     public Position findPlayer() throws PositionNotFoundException {
     	Position pos = null;
@@ -53,75 +50,54 @@ public class World {
     public Position findEntity(WorldEntity w) {
         for (int x = 0; x < getDimension().width; x++) {
             for (int y = 0; y < getDimension().height; y++) {
-                if (raw.get(levelactual)[y][x] == w ) {
+                if (raw.get(actualLevel)[y][x] == w ) {
                     return new Position(x, y);
                 }
             }
         }
         return null;
     }
-    
-    
+
     
     public List<Monster> findMonster(Game a){
     	List<Monster> monsters=new ArrayList<>();
         for (int x = 0; x < getDimension().width; x++) {
             for (int y = 0; y < getDimension().height; y++) {
-                if (raw.get(levelactual)[y][x] == WorldEntity.Monster) {
+                if (raw.get(actualLevel)[y][x] == WorldEntity.Monster) {
                     monsters.add(new Monster(a, new Position(x,y)));
                 }
             }
         }
         return monsters;
     }
-    
-    
-    
-    public int nbMonsters() {
-    	int i=0;
-        for (int x = 0; x < getDimension().width; x++) {
-            for (int y = 0; y < getDimension().height; y++) {
-                if (raw.get(levelactual)[y][x] == WorldEntity.Monster) {
-                   i++;
-                }
-            }
-        }
-        return i;
-    }
-    
-    
-    
+
     
     public Dimension getDimension() {
-		return dimension.get(levelactual);
+		return dimension.get(actualLevel);
 	}
 
 	public Decor get(Position position) {
-        return grid.get(levelactual).get(position);
+        return grid.get(actualLevel).get(position);
     }
 
     public void set(Position position, Decor decor) {
-        grid.get(levelactual).put(position, decor);
+        grid.get(actualLevel).put(position, decor);
     }
 
     public void clear(Position position) {
-        grid.get(levelactual).remove(position);
+        grid.get(actualLevel).remove(position);
     }
 
     public void forEach(BiConsumer<Position, Decor> fn) {
-        grid.get(levelactual).forEach(fn);
+        grid.get(actualLevel).forEach(fn);
     }
 
     public Collection<Decor> values() {
-        return grid.get(levelactual).values();
-    }
-
-    public boolean isInside(Position position) {
-        return true; // to update
+        return grid.get(actualLevel).values();
     }
 
     public boolean isEmpty(Position position) {
-        return grid.get(levelactual).get(position) == null;
+        return grid.get(actualLevel).get(position) == null;
     }
 
 	public boolean isAffichage() {
@@ -148,12 +124,7 @@ public class World {
 		this.levelUp = levelUp;
 	}
 
-
-	public int getLevelactual() {
-		return levelactual;
-	}
-
-	public void setLevelactual(int levelactual) {
-		this.levelactual = levelactual;
+	public void setActualLevel(int actualLevel) {
+		this.actualLevel = actualLevel;
 	}
 }

@@ -25,15 +25,12 @@ public class StatusBar {
     private Text keyValue = new Text();
     private HBox level = new HBox();
     private int gameLevel = 1;
-
-    private final Game game;
     private final DropShadow ds = new DropShadow();
 
 
 
-    public StatusBar(Group root, int sceneWidth, int sceneHeight, Game game) {
+    public StatusBar(Group root, int sceneWidth, int sceneHeight) {
         // Status bar
-        this.game = game;
 
         level.getStyleClass().add("level");
         level.getChildren().add(new ImageView(ImageFactory.getInstance().getDigit(gameLevel)));

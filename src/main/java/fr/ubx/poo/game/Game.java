@@ -27,13 +27,13 @@ public class Game {
     private int level=0;
     private int levels;
     private String prefix;
-    private boolean changelevel=false;
+    private boolean changedLevel=false;
     
 
     public Game(String worldPath) {
         this.worldPath = worldPath;
         loadConfig(worldPath);
-        world=new World(loadGame(worldPath),levels);
+        world=new World(loadGame(worldPath));
         Position positionPlayer = null;
         monsters = world.findMonster(this);
         
@@ -115,12 +115,12 @@ public class Game {
         return this.player;
     }
 
-	public boolean isChangelevel() {
-		return changelevel;
+	public boolean isChangedLevel() {
+		return changedLevel;
 	}
 
-	public void setChangelevel(boolean changelevel) {
-		this.changelevel = changelevel;
+	public void setChangedLevel(boolean changedlevel) {
+		this.changedLevel = changedlevel;
 	}
 	
 	public int getLevel() {
@@ -128,7 +128,7 @@ public class Game {
 	}
 	
 	public void setLevel(int l) {
-		this.getWorld().setLevelactual(l);
+		this.getWorld().setActualLevel(l);
 		this.level=l;
 		
 	}
@@ -137,8 +137,5 @@ public class Game {
 		return monsters;
 	}
 
-	public void setMonsters(List<Monster> monsters) {
-		this.monsters = monsters;
-	}
 
 }
