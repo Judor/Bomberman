@@ -84,7 +84,7 @@ public class Monster extends GameObject implements Movable {
             Player player=game.getPlayer();
 
             if (this.getPosition().equals(player.getPosition())) {
-                player.getHurt();
+                player.getHurt(player.getPosition());
             }
         }
     }
@@ -97,11 +97,17 @@ public class Monster extends GameObject implements Movable {
         moveRequested = false;
     }
 
-    public void getHurt(){
-        lives=lives-1;
-        if (lives==0) {
-            alive = false;
+    public void getHurt(Position pos){
+        if (pos.equals(this.getPosition())) {
+        	lives=lives-1;
+        	System.out.println("nb vies du monstre : " +lives);
+        	if (lives == 0) {
+        		alive = false;
+            	System.out.println("alive ? : " +alive);
+
+        	}
         }
+    	
     }
 
     public boolean isAlive() {

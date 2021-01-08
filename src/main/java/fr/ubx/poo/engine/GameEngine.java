@@ -36,7 +36,7 @@ public final class GameEngine {
     private final String windowTitle;
     private final Game game;
     private final Player player;
-    private Monster[] monster;
+    private List<Monster> monsters = new ArrayList<>();
     private Bomb bomb;
     private final List<Sprite> sprites = new ArrayList<>();
     private StatusBar statusBar;
@@ -46,7 +46,6 @@ public final class GameEngine {
     private Sprite spritePlayer;
     private List<SpriteBomb> spriteBomb=new ArrayList<>();
     private List<Sprite> spriteMonster=new ArrayList<>();
-    private int nbMonster;
     private int nbBomb=0;
 
 
@@ -55,7 +54,7 @@ public final class GameEngine {
         this.windowTitle = windowTitle;
         this.game = game;
         this.player = game.getPlayer();
-        this.monster = game.getMonster();
+        this.monsters = game.getMonsters();
         initialize(stage, game);
         buildAndSetGameLoop();
     }
@@ -89,15 +88,16 @@ public final class GameEngine {
 			System.out.println("aaaaaaaaaaaaaaaa");
 		}
         
+        monsters.clear();
+        monsters.addAll(game.getWorld().findMonster(game));
+        
         // Create decor sprites
         game.getWorld().forEach( (pos,d) -> sprites.add(SpriteFactory.createDecor(layer, pos, d)));
         // Create Player sprites
         spritePlayer = SpriteFactory.createPlayer(layer, player);
         // Create Monsters sprites
-        nbMonster=game.getWorld().nbMonsters();
-        for(int i=0;i<nbMonster;i++) {
-        	spriteMonster.add(SpriteFactory.createMonster(layer,monster[i]));
-        }
+        monsters.forEach(monster -> spriteMonster.add(SpriteFactory.createMonster(layer, monster)));
+        
         
         MonstersMoveAutomatically(); //Make Monsters move by themselves
 
@@ -184,14 +184,21 @@ public final class GameEngine {
     	
     	
         player.update(now);
-        for (int i = 0; i < nbMonster; i++) {
-            monster[i].update(now);
-        }
-
+        monsters.forEach(monster  -> monster.update(now));
+        
+        
+        
         if (!player.isAlive()){
             gameLoop.stop();
         showMessage("You looser ! ", Color.RED);
     }
+        for (Monster monster : monsters) {
+        	if (monster.isAlive()==false){
+        		monsters.remove(monster);
+        	}
+        }
+        
+        
         if (player.isWinner()) {
             gameLoop.stop();
             showMessage("Congrats,it's a wrap ! ", Color.BLUE);
@@ -203,9 +210,8 @@ public final class GameEngine {
         t.scheduleAtFixedRate(new TimerTask() {
             @Override
             public void run() {
-                for (int i = 0; i < nbMonster; i++) {
-                    monster[i].RandomMove();
-                }
+            	monsters.forEach(monster -> monster.RandomMove());
+                
             }
         }, 2000,1300);
     }
@@ -219,12 +225,11 @@ public final class GameEngine {
     		game.getWorld().setAffichage(false);
     	}
         sprites.forEach(Sprite::render);
-        for (int i = 0; i < nbMonster; i++) {
-            if (!monster[i].isAlive()){
-                spriteMonster.get(i).remove();
-                spriteMonster.remove(i);
-                nbMonster=nbMonster-1;
-            }
+        
+        for (Monster monster : monsters) {
+        	if (monster.isAlive()==false){
+        		spriteMonster.forEach(Sprite::remove);
+        	}
         }
         spriteMonster.forEach(Sprite::render);
         spritePlayer.render();
@@ -235,6 +240,7 @@ public final class GameEngine {
             }
         }
         spriteBomb.forEach(Sprite::render);
+        
     }
 
     public void start() {

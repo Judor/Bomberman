@@ -5,6 +5,7 @@
 package fr.ubx.poo.game;
 
 import fr.ubx.poo.model.decor.Decor;
+import fr.ubx.poo.model.go.character.Monster;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -62,18 +63,16 @@ public class World {
     
     
     
-    public Position[] findMonster(int a){
-    	Position[] pos=new Position[a];
-    	int i=0;
+    public List<Monster> findMonster(Game a){
+    	List<Monster> monsters=new ArrayList<>();
         for (int x = 0; x < getDimension().width; x++) {
             for (int y = 0; y < getDimension().height; y++) {
                 if (raw.get(levelactual)[y][x] == WorldEntity.Monster) {
-                    pos[i]= new Position(x, y);
-                    i++;
+                    monsters.add(new Monster(a, new Position(x,y)));
                 }
             }
         }
-        return pos;
+        return monsters;
     }
     
     

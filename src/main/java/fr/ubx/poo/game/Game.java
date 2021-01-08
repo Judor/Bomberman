@@ -21,10 +21,9 @@ import fr.ubx.poo.model.go.character.*;
 public class Game {
     private final World world;
     private final Player player;
-    private Monster[]  monster;
+    private List<Monster>  monsters = new ArrayList<>();
     private final String worldPath;
     public int initPlayerLives;
-    private int nbMonster;
     private int level=0;
     private int levels;
     private String prefix;
@@ -36,13 +35,8 @@ public class Game {
         loadConfig(worldPath);
         world=new World(loadGame(worldPath),levels);
         Position positionPlayer = null;
-        Position[] positionMonster=null;
-        nbMonster=world.nbMonsters();
-        positionMonster = world.findMonster(nbMonster);
-        monster=new Monster[nbMonster];
-        for (int i=0;i<nbMonster;i++) {
-        	monster[i] = new Monster(this, positionMonster[i]);
-        }
+        monsters = world.findMonster(this);
+        
         try {
             positionPlayer = world.findPlayer();
             player = new Player(this, positionPlayer);
@@ -120,13 +114,6 @@ public class Game {
     public Player getPlayer() {
         return this.player;
     }
-    public Monster[] getMonster(){
-        return this.monster;
-    }
-
-    public int getNbMonster(){
-        return this.nbMonster;
-    }
 
 	public boolean isChangelevel() {
 		return changelevel;
@@ -144,6 +131,14 @@ public class Game {
 		this.getWorld().setLevelactual(l);
 		this.level=l;
 		
+	}
+
+	public List<Monster> getMonsters() {
+		return monsters;
+	}
+
+	public void setMonsters(List<Monster> monsters) {
+		this.monsters = monsters;
 	}
 
 }

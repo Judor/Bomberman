@@ -4,6 +4,8 @@
 
 package fr.ubx.poo.model.go.character;
 
+import java.util.List;
+
 import fr.ubx.poo.game.Direction;
 import fr.ubx.poo.game.Position;
 import fr.ubx.poo.model.Movable;
@@ -122,15 +124,8 @@ public class Player extends GameObject implements Movable {
         }
         
 
-        Monster[] monster = game.getMonster();
-        int nbMonster = game.getNbMonster();
-        for (int i = 0; i < nbMonster; i++) {
-            if (monster[i].getPosition().equals(this.getPosition()))
-                if (monster[i].isAlive()) {
-                getHurt();
-            }
-
-        }
+        List<Monster> monsters = game.getMonsters();
+        monsters.forEach(monster -> getHurt(monster.getPosition()));
     }
 	public void update(long now) {
         if (moveRequested)
@@ -140,10 +135,12 @@ public class Player extends GameObject implements Movable {
     }
 
 
-    public void getHurt(){
-        lives=lives-1;
-        if (lives == 0)
-            alive = false;
+    public void getHurt(Position pos){
+        if (pos.equals(this.getPosition())) {
+        	lives=lives-1;
+        	if (lives == 0) alive = false;
+        }
+    	
     }
     
     
