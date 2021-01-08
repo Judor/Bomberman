@@ -31,6 +31,7 @@ public enum ImageResource {
     BOMBRANGEINC("bonus_bomb_range_inc.png"),
     DOORNEXTOPENED("door_opened.png"),
     DOORNEXTCLOSED("door_closed.png"),
+    DOORPREVOPENED("door_opened.png"),
     MONSTER_UP("monster_up.png"),
     MONSTER_DOWN("monster_down.png"),
     MONSTER_RIGHT("monster_right.png"),
