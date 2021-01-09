@@ -131,10 +131,14 @@ public final class GameEngine {
         if (input.isMoveUp()) {
             player.requestMove(Direction.N);
         }
+        
         if (input.isBomb()) {
             if (player.getBombs() > 0) {
                 player.decBomb();
-                bombs.add(new Bomb(game, player.getPosition()));
+                Bomb b = new Bomb(game, player.getPosition());
+                bombs.add(b);
+                
+                /*
                 Iterator<Bomb> itr = bombs.iterator();
                 while (itr.hasNext()) {
                     Bomb nextBomb = itr.next();
@@ -142,9 +146,12 @@ public final class GameEngine {
                         itr.remove();
                     }
                 }
-                for (int i = 0; i < bombs.size(); i++) {
-                        spriteBomb.add((SpriteBomb) SpriteFactory.createBomb(layer,bombs.get(i)));
-                }
+                
+                */
+                
+                spriteBomb.add((SpriteBomb) SpriteFactory.createBomb(layer,b));
+                
+                
             }
         }
         if (input.isKey()) {
@@ -190,6 +197,7 @@ public final class GameEngine {
         		monsters.remove(monsters.get(i));
         	}
         }
+        bombs.forEach(b -> b.update(now));
 
         if (!player.isAlive()){
             gameLoop.stop();
@@ -199,6 +207,8 @@ public final class GameEngine {
             gameLoop.stop();
             showMessage("Congrats! ", Color.BLUE);
         }
+        bombs.removeIf(b -> b.getBoomed());
+
     }
 
     private void MonstersMoveAutomatically(){
@@ -208,7 +218,7 @@ public final class GameEngine {
             public void run() {
             	monsters.forEach(monster -> monster.RandomMove());
             }
-        }, 0, (3- game.getLevel())*1000);
+        }, 1, (3- game.getLevel())*1000);
     }
 
     private void render() {
@@ -229,12 +239,19 @@ public final class GameEngine {
             }
         }
         for(int i=0;i<spriteBomb.size();i++){
-            if (spriteBomb.get(i).getBoom()){
+            if (spriteBomb.get(i).getBomb().getBoomed()){
                 spriteBomb.get(i).remove();
                 spriteBomb.remove(i);
+        		game.getWorld().setAffichage(true);
+
 
             }
         }
+        
+        
+        
+        
+        /*
         if(bombs.size()!=0) {
             for (int i = 0; i<bombs.size();i++){
                 if (bombs.get(i).getBoomed()) {
@@ -253,14 +270,17 @@ public final class GameEngine {
                     sprites.get(i).render();
                 }
             }
-                else {
+            else {
                 sprites.get(i).render();
 
             }
         }
+        */
+        sprites.forEach(Sprite :: render);
         spriteMonster.forEach(Sprite::render);
-        spritePlayer.render();
         spriteBomb.forEach(Sprite::render);
+        spritePlayer.render();
+
     }
 
     public void start() {

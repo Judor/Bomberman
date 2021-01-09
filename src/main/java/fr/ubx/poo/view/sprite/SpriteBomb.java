@@ -65,6 +65,10 @@ public class SpriteBomb extends SpriteGameObject {
     public boolean getBoom(){
         return (state==4) ;
     }
+    
+    public Bomb getBomb() {
+    	return (Bomb) this.go;
+    }
 
 
 }
