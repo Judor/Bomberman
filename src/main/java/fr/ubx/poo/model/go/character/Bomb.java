@@ -14,10 +14,9 @@ import java.util.*;
 
 public class Bomb extends GameObject {
     private List<Position> listExplosion=new ArrayList<>();
-    Timer t=new Timer();
+    private Timer t=new Timer();
     private int range;
     private boolean boomed=false;
-
 
     public Bomb(Game game,Position position){
         super(game,position);
@@ -31,8 +30,7 @@ public class Bomb extends GameObject {
         }
     };
 
-
-    public void labomb() {
+    public void theBomb() {
         World world = game.getWorld();
         Player player=game.getPlayer();
         List<Monster> monsters = game.getMonsters();
@@ -62,35 +60,26 @@ public class Bomb extends GameObject {
                     break;
                 }
 
-
                 if (nextDec instanceof Bombnumberdec) {
                     listExplosion.add(nextPos);
                     world.clear(nextPos);
-
                     world.setAffichage(true);
                 }
                 if (nextDec instanceof Bombnumberinc) {
                     listExplosion.add(nextPos);
                     world.clear(nextPos);
-
                     world.setAffichage(true);
                 }
                 if (nextPos.equals(player.getPosition())) {
-                    //listExplosion.add(nextPos);
                     player.getHurt(player.getPosition());
                 }
                 for (Monster monster : monsters) {
                     if (monster.getPosition().equals(nextPos)) {
-                        //listExplosion.add(nextPos);
                         monster.getHurt(monster.getPosition());
                     }
                 }
-
             }
-
         }
-
-
         listExplosion.add(getPosition());
         System.out.println("pos player : " + getPosition());
         listExplosion.forEach(e -> world.set(e, new Explosion()));
@@ -99,36 +88,27 @@ public class Bomb extends GameObject {
         TimerTask explosion = new TimerTask() {
             public void run() {
                 listExplosion.forEach(e -> world.clear(e));
-                //listExplosion.forEach(e -> world.set(e, new Explosion()));
-
                 world.setAffichage(true);
             }
         };
+
         Timer t1 = new Timer();
         t1.schedule(explosion, 1000);
-
-
         player.incBomb();
         world.setAffichage(true);
         boomed = true;
     }
 
-
-
-    public void update(long now) {
+    public void update() {
         Decor d = game.getWorld().get(getPosition());
         if (boomed || d instanceof Explosion) {
             boomed=true;
-            labomb();
+            theBomb();
         }
-
     }
 
     public boolean getBoomed(){
         return boomed;
     }
 
-    public List<Position> getListExplosion() {
-        return listExplosion;
-    }
 }

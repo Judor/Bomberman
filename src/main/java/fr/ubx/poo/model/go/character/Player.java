@@ -123,12 +123,11 @@ public class Player extends GameObject implements Movable {
         if (nextdec instanceof Bomberwoman) {
             winner = true;
         }
-        
-
         List<Monster> monsters = game.getMonsters();
         monsters.forEach(monster -> getHurt(monster.getPosition()));
     }
-	public void update(long now) {
+
+	public void update() {
         if (moveRequested)
             if (canMove(direction))
                 doMove(direction);
@@ -143,10 +142,8 @@ public class Player extends GameObject implements Movable {
                 alive = false;
             }
         }
-    	
     }
-    
-    
+
     public void doorOpening() {
     	Position nextPos = direction.nextPosition(getPosition());
     	Decor nextDec = game.getWorld().get(nextPos);
@@ -160,9 +157,7 @@ public class Player extends GameObject implements Movable {
             }
         }
     }
-    
-    
-    
+
     public void decBomb(){
         this.bombs=this.bombs-1;
     }

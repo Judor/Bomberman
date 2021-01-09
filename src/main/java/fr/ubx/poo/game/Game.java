@@ -119,8 +119,8 @@ public class Game {
 		return changedLevel;
 	}
 
-	public void setChangedLevel(boolean changedlevel) {
-		this.changedLevel = changedlevel;
+	public void setChangedLevel(boolean changedLevel) {
+		this.changedLevel = changedLevel;
 	}
 	
 	public int getLevel() {
@@ -130,9 +130,7 @@ public class Game {
 	public void setLevel(int l) {
 		this.getWorld().setActualLevel(l);
 		this.level=l;
-		
 	}
-
 	public List<Monster> getMonsters() {
 		return monsters;
 	}

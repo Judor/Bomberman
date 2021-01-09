@@ -2,6 +2,7 @@ package fr.ubx.poo.model.go.character;
 
 import fr.ubx.poo.game.Direction;
 import fr.ubx.poo.game.Position;
+import fr.ubx.poo.game.World;
 import fr.ubx.poo.model.Entity;
 import fr.ubx.poo.model.Movable;
 import fr.ubx.poo.model.decor.Decor;
@@ -16,6 +17,7 @@ public class Monster extends GameObject implements Movable {
     private int lives=1;
     private boolean moveRequested = false;
     private boolean alive=true;
+    World world=game.getWorld();
 
 
     public Monster(Game game, Position position){
@@ -23,9 +25,7 @@ public class Monster extends GameObject implements Movable {
         this.direction=Direction.S;
         this.lives=1;
     }
-    public int getLives() {
-        return lives;
-    }
+
     public void setLives(int L) {
         this.lives=L;
     }
@@ -61,9 +61,8 @@ public class Monster extends GameObject implements Movable {
 
     public boolean canMove(Direction direction) {
         Position Pos = direction.nextPosition(getPosition());
-        Position nextnextPos = direction.nextPosition(Pos);
-        Decor nextdec= game.getWorld().get(Pos);
-        if (! (Pos.inside(game.getWorld().getDimension())) || nextdec instanceof Stone  || nextdec instanceof Tree ||  nextdec instanceof Box){
+        Decor nextDec= world.get(Pos);
+        if (! (Pos.inside(world.getDimension())) || nextDec instanceof Stone  || nextDec instanceof Tree ||  nextDec instanceof Box){
             return false;
         }
         return true;
@@ -72,23 +71,20 @@ public class Monster extends GameObject implements Movable {
     public void doMove(Direction direction){
         if (alive){
             Position nextPos = direction.nextPosition(getPosition());
-            Position nextnextPos = direction.nextPosition(nextPos);
-            Decor nextdec = game.getWorld().get(nextPos);
+            Decor nextDec = world.get(nextPos);
             setPosition(nextPos);
-
-            if( nextdec instanceof Heart ) {
-                setLives(lives+1);
-                game.getWorld().clear(nextPos);
-                game.getWorld().setAffichage(true);
-            }
             Player player=game.getPlayer();
 
+            if( nextDec instanceof Heart ) {
+                setLives(lives+1);
+                world.clear(nextPos);
+                world.setAffichage(true);
+            }
             if (this.getPosition().equals(player.getPosition())) {
                 player.getHurt(player.getPosition());
             }
         }
     }
-
 
     public void update(long now) {
         if (moveRequested)
@@ -100,14 +96,10 @@ public class Monster extends GameObject implements Movable {
     public void getHurt(Position pos){
         if (pos.equals(this.getPosition())) {
         	lives=lives-1;
-        	System.out.println("nb vies du monstre : " +lives);
         	if (lives == 0) {
         		alive = false;
-            	System.out.println("alive ? : " +alive);
-
         	}
         }
-    	
     }
 
     public boolean isAlive() {

@@ -30,19 +30,19 @@ public final class GameEngine {
     private static AnimationTimer gameLoop;
     private final String windowTitle;
     private final Game game;
-    private final Player player;
-    private List<Monster> monsters = new ArrayList<>();
-    private List<Bomb> bombs= new ArrayList<>();
-    private final List<Sprite> sprites = new ArrayList<>();
     private StatusBar statusBar;
     private Pane layer;
     private Input input;
     private Stage stage;
-    private Sprite spritePlayer;
-    private List<SpriteBomb> spriteBomb=new ArrayList<>();
-    private List<Sprite> spriteMonster=new ArrayList<>();
+    private final Player player;
+    private List<Monster> monsters;
+    private List<Bomb> bombs= new ArrayList<>();
     private boolean monsterDead=false;
     private int iDeadMonster=0;
+    private Sprite spritePlayer;
+    private final List<Sprite> sprites = new ArrayList<>();
+    private List<SpriteBomb> spriteBomb=new ArrayList<>();
+    private List<Sprite> spriteMonster=new ArrayList<>();
 
 
     public GameEngine(final String windowTitle, Game game, final Stage stage) {
@@ -87,13 +87,14 @@ public final class GameEngine {
         // Create Player sprites
         spritePlayer = SpriteFactory.createPlayer(layer, player);
 
-        // Create Monsters sprites
+        // Create Monsters and their sprites
         monsters.clear();
         monsters.addAll(game.getWorld().findMonster(game));
         iDeadMonster=0;
         monsterDead=false;
-        spriteMonster.clear();
-        monsters.forEach(monster -> spriteMonster.add(SpriteFactory.createMonster(layer, monster)));
+        spriteMonster.clear();  //We clear the monsters from previous levels.
+        monsters.forEach(monster->monster.setLives(game.getLevel()+1)); // The higher the level, the tougher the monsters
+        monsters.forEach(monster -> spriteMonster.add(SpriteFactory.createMonster(layer, monster))); //Create the monsters sprites
         MonstersMoveAutomatically(); //Make Monsters move by themselves
     }
 
@@ -131,27 +132,13 @@ public final class GameEngine {
         if (input.isMoveUp()) {
             player.requestMove(Direction.N);
         }
-        
+        //Let's check if player has a bomb in his inventory,decrement it, create a new bomb and a new sprite associated to it
         if (input.isBomb()) {
             if (player.getBombs() > 0) {
                 player.decBomb();
                 Bomb b = new Bomb(game, player.getPosition());
                 bombs.add(b);
-                
-                /*
-                Iterator<Bomb> itr = bombs.iterator();
-                while (itr.hasNext()) {
-                    Bomb nextBomb = itr.next();
-                    if (nextBomb.getBoomed()) {
-                        itr.remove();
-                    }
-                }
-                
-                */
-                
                 spriteBomb.add((SpriteBomb) SpriteFactory.createBomb(layer,b));
-                
-                
             }
         }
         if (input.isKey()) {
@@ -184,11 +171,9 @@ public final class GameEngine {
     		game.setChangedLevel(false);
     		initialize(stage,game);
     	}
-
-        player.update(now);
-
+    	//Update Monsters
+        //If a monster is dead,  monsterDead will become true, and iDeadMonster will be the "id" of the dead monster that we'll have to delete
         monsters.forEach(monster -> monster.update(now));
-
         iDeadMonster=0;
         for (int i=0;i< monsters.size();i++) {
         	if (!monsters.get(i).isAlive()){
@@ -197,8 +182,8 @@ public final class GameEngine {
         		monsters.remove(monsters.get(i));
         	}
         }
-        bombs.forEach(b -> b.update(now));
-
+        //Update Player & See if he won or if he died
+        player.update();
         if (!player.isAlive()){
             gameLoop.stop();
             showMessage("You looser ! ", Color.RED);
@@ -207,8 +192,9 @@ public final class GameEngine {
             gameLoop.stop();
             showMessage("Congrats! ", Color.BLUE);
         }
+        //Update bombs
+        bombs.forEach(b -> b.update());
         bombs.removeIf(b -> b.getBoomed());
-
     }
 
     private void MonstersMoveAutomatically(){
@@ -218,7 +204,7 @@ public final class GameEngine {
             public void run() {
             	monsters.forEach(monster -> monster.RandomMove());
             }
-        }, 1, (3- game.getLevel())*1000);
+        }, 1, (3- game.getLevel())*1000); //The higher the level, the faster the monsters
     }
 
     private void render() {
@@ -228,6 +214,7 @@ public final class GameEngine {
     		game.getWorld().forEach((Pos,dec) -> sprites.add(SpriteFactory.createDecor(layer,Pos,dec)));
     		game.getWorld().setAffichage(false);
     	}
+    	//Remove the sprites of dead monsters
         if (monsterDead) {
             for (int i = 0; i < spriteMonster.size(); i++) {
                 if(i==iDeadMonster){
@@ -238,54 +225,23 @@ public final class GameEngine {
                 }
             }
         }
+        //Remove the sprites of exploded bombs
         for(int i=0;i<spriteBomb.size();i++){
             if (spriteBomb.get(i).getBomb().getBoomed()){
                 spriteBomb.get(i).remove();
                 spriteBomb.remove(i);
         		game.getWorld().setAffichage(true);
-
-
             }
         }
-        
-        
-        
-        
-        /*
-        if(bombs.size()!=0) {
-            for (int i = 0; i<bombs.size();i++){
-                if (bombs.get(i).getBoomed()) {
-                    bombs.get(i).getListExplosion().forEach(position ->
-                            sprites.add(SpriteFactory.createExplosion(layer, position)));
-                }
-            }
-        }
-        for(int i=0;i<sprites.size();i++){
-            if (sprites.get(i).getIfExplosion()) {
-                if (sprites.get(i).getExplosionSaw()) {
-                    sprites.get(i).remove();
-                    sprites.remove(i);
-                }
-                else {
-                    sprites.get(i).render();
-                }
-            }
-            else {
-                sprites.get(i).render();
-
-            }
-        }
-        */
+        //Render all the sprites
         sprites.forEach(Sprite :: render);
         spriteMonster.forEach(Sprite::render);
         spriteBomb.forEach(Sprite::render);
         spritePlayer.render();
-
     }
 
     public void start() {
         gameLoop.start();
     }
-
 
 }
