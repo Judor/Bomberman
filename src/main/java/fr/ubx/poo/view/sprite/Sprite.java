@@ -9,12 +9,17 @@ import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.Pane;
 
-public abstract class Sprite {
+import java.util.Timer;
+import java.util.TimerTask;
 
+public abstract class Sprite {
+    Timer t=new Timer();
     public static final int size = 40;
     private final Pane layer;
     private ImageView imageView;
     private Image image;
+    private boolean explosionSaw=false;
+    private boolean explosion=false;
 
     public Sprite(Pane layer, Image image) {
         this.layer = layer;
@@ -46,6 +51,23 @@ public abstract class Sprite {
         layer.getChildren().remove(imageView);
         imageView = null;
     }
+    public void explose(){
+        TimerTask setExplosionSaw = new TimerTask() {
+            @Override
+            public void run() {
+                explosionSaw=true;
+                explosion=true;
+            }
+        };
+        t.schedule(setExplosionSaw, 1000);
+    }
 
+    public boolean getIfExplosion(){
+        return explosion;
+    }
+
+    public boolean getExplosionSaw(){
+        return explosionSaw;
+    }
 
 }

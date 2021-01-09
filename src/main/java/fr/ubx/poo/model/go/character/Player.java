@@ -8,6 +8,7 @@ import java.util.List;
 
 import fr.ubx.poo.game.Direction;
 import fr.ubx.poo.game.Position;
+import fr.ubx.poo.game.World;
 import fr.ubx.poo.model.Movable;
 import fr.ubx.poo.model.decor.*;
 import fr.ubx.poo.model.go.GameObject;
@@ -138,20 +139,23 @@ public class Player extends GameObject implements Movable {
     public void getHurt(Position pos){
         if (pos.equals(this.getPosition())) {
         	lives=lives-1;
-        	if (lives == 0) alive = false;
+        	if (lives == 0) {
+                alive = false;
+            }
         }
     	
     }
     
     
     public void doorOpening() {
-    	Position nextpos = direction.nextPosition(getPosition());
-    	Decor nextdec = game.getWorld().get(nextpos);
-    	if (nextdec instanceof Doornextclosed) {
+    	Position nextPos = direction.nextPosition(getPosition());
+    	Decor nextDec = game.getWorld().get(nextPos);
+    	World world=game.getWorld();
+    	if (nextDec instanceof Doornextclosed) {
             if (keys != 0) {
-                game.getWorld().clear(nextpos);
-                game.getWorld().setAffichage(true);
-                game.getWorld().set(nextpos, new Doornextopened());
+                world.clear(nextPos);
+                world.setAffichage(true);
+                world.set(nextPos, new Doornextopened());
                 keys--;
             }
         }

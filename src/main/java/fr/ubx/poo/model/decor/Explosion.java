@@ -25,7 +25,5 @@ public class Explosion extends Decor {
         }
     };
 
-    public boolean getExplosionSaw(){
-        return explosionSaw;
-    }
+
 }

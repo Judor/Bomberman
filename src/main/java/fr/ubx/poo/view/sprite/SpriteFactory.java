@@ -62,6 +62,9 @@ public final class SpriteFactory {
         return new SpriteBomb(layer,bomb);
     }
 
-    public static Sprite createExplosion(Pane layer,Position position){return new SpriteDecor(layer,ImageFactory.getInstance().get(EXPLOSION),position);}
-
+    public static Sprite createExplosion(Pane layer,Position position) {
+        SpriteDecor Ex = new SpriteDecor(layer, ImageFactory.getInstance().get(EXPLOSION), position);
+        Ex.explose();
+        return Ex;
+    }
 }

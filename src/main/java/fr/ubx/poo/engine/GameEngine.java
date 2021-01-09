@@ -5,6 +5,7 @@
 package fr.ubx.poo.engine;
 
 import fr.ubx.poo.game.Direction;
+import fr.ubx.poo.model.decor.Explosion;
 import fr.ubx.poo.view.sprite.*;
 import fr.ubx.poo.game.Game;
 import fr.ubx.poo.game.PositionNotFoundException;
@@ -130,22 +131,24 @@ public final class GameEngine {
         if (input.isMoveUp()) {
             player.requestMove(Direction.N);
         }
-        if(input.isBomb()){
-            if (player.getBombs()>0){
+        if (input.isBomb()) {
+            if (player.getBombs() > 0) {
+                player.decBomb();
+                bombs.add(new Bomb(game, player.getPosition()));
                 Iterator<Bomb> itr = bombs.iterator();
-                while(itr.hasNext()){
-                    Bomb nextBomb=itr.next();
-                    if (nextBomb.getBoomed()){
+                while (itr.hasNext()) {
+                    Bomb nextBomb = itr.next();
+                    if (nextBomb.getBoomed()) {
                         itr.remove();
                     }
                 }
-                player.decBomb();
-                bombs.add(new Bomb(game,player.getPosition()));
-                bombs.forEach(bomb -> spriteBomb.add((SpriteBomb)SpriteFactory.createBomb(layer,bomb)));
+                for (int i = 0; i < bombs.size(); i++) {
+                        spriteBomb.add((SpriteBomb) SpriteFactory.createBomb(layer,bombs.get(i)));
+                }
             }
         }
-        if(input.isKey()){
-        	player.doorOpening();
+        if (input.isKey()) {
+            player.doorOpening();
         }
         input.clear();
     }
@@ -170,7 +173,6 @@ public final class GameEngine {
     }
 
     private void update(long now) {
-
     	if (game.isChangedLevel()) {
     		game.setChangedLevel(false);
     		initialize(stage,game);
@@ -226,15 +228,11 @@ public final class GameEngine {
                 }
             }
         }
-        spriteMonster.forEach(Sprite::render);
-        spritePlayer.render();
-        spriteBomb.forEach(Sprite::render);
-        sprites.forEach(Sprite::render);
-
         for(int i=0;i<spriteBomb.size();i++){
             if (spriteBomb.get(i).getBoom()){
                 spriteBomb.get(i).remove();
                 spriteBomb.remove(i);
+
             }
         }
         if(bombs.size()!=0) {
@@ -245,6 +243,24 @@ public final class GameEngine {
                 }
             }
         }
+        for(int i=0;i<sprites.size();i++){
+            if (sprites.get(i).getIfExplosion()) {
+                if (sprites.get(i).getExplosionSaw()) {
+                    sprites.get(i).remove();
+                    sprites.remove(i);
+                }
+                else {
+                    sprites.get(i).render();
+                }
+            }
+                else {
+                sprites.get(i).render();
+
+            }
+        }
+        spriteMonster.forEach(Sprite::render);
+        spritePlayer.render();
+        spriteBomb.forEach(Sprite::render);
     }
 
     public void start() {
