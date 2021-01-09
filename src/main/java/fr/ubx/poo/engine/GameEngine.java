@@ -52,6 +52,7 @@ public final class GameEngine {
 
 
 
+
     public GameEngine(final String windowTitle, Game game, final Stage stage) {
         this.windowTitle = windowTitle;
         this.game = game;
@@ -85,7 +86,6 @@ public final class GameEngine {
         try {
 			player.setPosition(game.getWorld().findPlayer());
 		} catch (PositionNotFoundException positionNotFoundException) {
-			// TODO Auto-generated catch block
 			positionNotFoundException.printStackTrace();
 			System.out.println("No Player found !");
 		}
@@ -98,6 +98,8 @@ public final class GameEngine {
         // Create Monsters sprites
         monsters.clear();
         monsters.addAll(game.getWorld().findMonster(game));
+        iDeadMonster=0;
+        monsterDead=false;
         spriteMonster.clear();
         monsters.forEach(monster -> spriteMonster.add(SpriteFactory.createMonster(layer, monster)));
         MonstersMoveAutomatically(); //Make Monsters move by themselves
@@ -170,23 +172,28 @@ public final class GameEngine {
     }
 
     private void update(long now) {
+
     	if (game.isChangedLevel()) {
     		game.setChangedLevel(false);
     		initialize(stage,game);
     	}
+
         player.update(now);
+
         monsters.forEach(monster -> monster.update(now));
+
+        iDeadMonster=0;
+        for (int i=0;i< monsters.size();i++) {
+        	if (!monsters.get(i).isAlive()){
+                iDeadMonster=i;
+        	    monsterDead=true;
+        		monsters.remove(monsters.get(i));
+        	}
+        }
+
         if (!player.isAlive()){
             gameLoop.stop();
-        showMessage("You looser ! ", Color.RED);
-        }
-        iDeadMonster=0;
-        for (Monster monster : monsters) {
-            iDeadMonster+=1;
-        	if (monster.isAlive()==false){
-        	    monsterDead=true;
-        		monsters.remove(monster);
-        	}
+            showMessage("You looser ! ", Color.RED);
         }
         if (player.isWinner()) {
             gameLoop.stop();
@@ -217,6 +224,8 @@ public final class GameEngine {
                 if(i==iDeadMonster){
                     spriteMonster.get(i).remove();
                     spriteMonster.remove(i);
+                    monsterDead=false;
+                    iDeadMonster=0;
                 }
             }
         }
