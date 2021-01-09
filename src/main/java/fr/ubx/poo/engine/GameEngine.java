@@ -5,11 +5,7 @@
 package fr.ubx.poo.engine;
 
 import fr.ubx.poo.game.Direction;
-import fr.ubx.poo.game.World;
-import fr.ubx.poo.model.decor.Doornextopened;
-import fr.ubx.poo.view.sprite.Sprite;
-import fr.ubx.poo.view.sprite.SpriteBomb;
-import fr.ubx.poo.view.sprite.SpriteFactory;
+import fr.ubx.poo.view.sprite.*;
 import fr.ubx.poo.game.Game;
 import fr.ubx.poo.game.PositionNotFoundException;
 import fr.ubx.poo.model.go.character.*;
@@ -26,10 +22,7 @@ import javafx.scene.text.Text;
 import javafx.scene.text.TextAlignment;
 import javafx.stage.Stage;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Timer;
-import java.util.TimerTask;
+import java.util.*;
 
 
 public final class GameEngine {
@@ -38,7 +31,7 @@ public final class GameEngine {
     private final Game game;
     private final Player player;
     private List<Monster> monsters = new ArrayList<>();
-    private Bomb bomb;
+    private List<Bomb> bombs= new ArrayList<>();
     private final List<Sprite> sprites = new ArrayList<>();
     private StatusBar statusBar;
     private Pane layer;
@@ -49,8 +42,6 @@ public final class GameEngine {
     private List<Sprite> spriteMonster=new ArrayList<>();
     private boolean monsterDead=false;
     private int iDeadMonster=0;
-
-
 
 
     public GameEngine(final String windowTitle, Game game, final Stage stage) {
@@ -141,9 +132,16 @@ public final class GameEngine {
         }
         if(input.isBomb()){
             if (player.getBombs()>0){
+                Iterator<Bomb> itr = bombs.iterator();
+                while(itr.hasNext()){
+                    Bomb nextBomb=itr.next();
+                    if (nextBomb.getBoomed()){
+                        itr.remove();
+                    }
+                }
                 player.decBomb();
-                bomb=new Bomb(game,player.getPosition());
-                spriteBomb.add((SpriteBomb) SpriteFactory.createBomb(layer,bomb));
+                bombs.add(new Bomb(game,player.getPosition()));
+                bombs.forEach(bomb -> spriteBomb.add((SpriteBomb)SpriteFactory.createBomb(layer,bomb)));
             }
         }
         if(input.isKey()){
@@ -218,7 +216,6 @@ public final class GameEngine {
     		game.getWorld().forEach((Pos,dec) -> sprites.add(SpriteFactory.createDecor(layer,Pos,dec)));
     		game.getWorld().setAffichage(false);
     	}
-        sprites.forEach(Sprite::render);
         if (monsterDead) {
             for (int i = 0; i < spriteMonster.size(); i++) {
                 if(i==iDeadMonster){
@@ -231,13 +228,23 @@ public final class GameEngine {
         }
         spriteMonster.forEach(Sprite::render);
         spritePlayer.render();
+        spriteBomb.forEach(Sprite::render);
+        sprites.forEach(Sprite::render);
+
         for(int i=0;i<spriteBomb.size();i++){
             if (spriteBomb.get(i).getBoom()){
                 spriteBomb.get(i).remove();
                 spriteBomb.remove(i);
             }
         }
-        spriteBomb.forEach(Sprite::render);
+        if(bombs.size()!=0) {
+            for (int i = 0; i<bombs.size();i++){
+                if (bombs.get(i).getBoomed()) {
+                    bombs.get(i).getListExplosion().forEach(position ->
+                            sprites.add(SpriteFactory.createExplosion(layer, position)));
+                }
+            }
+        }
     }
 
     public void start() {

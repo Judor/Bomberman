@@ -11,6 +11,8 @@ import fr.ubx.poo.model.go.character.*;
 import fr.ubx.poo.view.image.ImageFactory;
 import javafx.scene.layout.Pane;
 
+import javax.sql.ConnectionPoolDataSource;
+
 
 public final class SpriteFactory {
 
@@ -42,6 +44,8 @@ public final class SpriteFactory {
             return new SpriteDecor(layer, factory.get(KEY), position);
         if (decor instanceof Heart)
             return new SpriteDecor(layer, factory.get(HEART), position);
+        if(decor instanceof Explosion)
+            return new SpriteDecor(layer,factory.get(EXPLOSION),position);
 
         throw new RuntimeException("Unsupported sprite for decor " + decor);
     }
@@ -57,4 +61,7 @@ public final class SpriteFactory {
     public static Sprite createBomb(Pane layer, Bomb bomb){
         return new SpriteBomb(layer,bomb);
     }
+
+    public static Sprite createExplosion(Pane layer,Position position){return new SpriteDecor(layer,ImageFactory.getInstance().get(EXPLOSION),position);}
+
 }
