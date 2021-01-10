@@ -4,8 +4,6 @@
 
 package fr.ubx.poo.engine;
 
-import static fr.ubx.poo.view.image.ImageResource.*;
-
 import fr.ubx.poo.game.Game;
 import fr.ubx.poo.view.image.ImageFactory;
 import javafx.scene.Group;
@@ -16,17 +14,17 @@ import javafx.scene.layout.HBox;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Text;
 
+import static fr.ubx.poo.view.image.ImageResource.*;
+
 public class StatusBar {
     public static final int height = 55;
-    private HBox hBox = new HBox();
-    private Text liveValue = new Text();
-    private Text bombsValue = new Text();
-    private Text rangeValue = new Text();
-    private Text keyValue = new Text();
-    private HBox level = new HBox();
-    private int gameLevel = 1;
+    private final Text liveValue = new Text();
+    private final Text bombsValue = new Text();
+    private final Text rangeValue = new Text();
+    private final Text keyValue = new Text();
+    private final HBox level = new HBox();
+    private final int gameLevel = 1;
     private final DropShadow ds = new DropShadow();
-
 
 
     public StatusBar(Group root, int sceneWidth, int sceneHeight) {
@@ -50,6 +48,7 @@ public class StatusBar {
         status.setSpacing(40.0);
         status.getChildren().addAll(live, bombs, range, key);
 
+        HBox hBox = new HBox();
         hBox.getChildren().addAll(level, status);
         hBox.getStyleClass().add("statusBar");
         hBox.relocate(0, sceneHeight);

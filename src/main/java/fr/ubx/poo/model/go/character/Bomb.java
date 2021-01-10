@@ -1,33 +1,34 @@
 package fr.ubx.poo.model.go.character;
 
 
+import fr.ubx.poo.game.Direction;
+import fr.ubx.poo.game.Game;
 import fr.ubx.poo.game.Position;
 import fr.ubx.poo.game.World;
-import fr.ubx.poo.model.Movable;
 import fr.ubx.poo.model.decor.*;
 import fr.ubx.poo.model.go.GameObject;
-import fr.ubx.poo.game.Game;
-import fr.ubx.poo.game.Direction;
-import fr.ubx.poo.view.sprite.SpriteBomb;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Timer;
+import java.util.TimerTask;
 
 public class Bomb extends GameObject {
 
-    private Timer t=new Timer();
-    private int range;
-    private List<Position> listExplosion=new ArrayList<>();
-    private boolean boomed=false;
+    private final int range;
+    private final List<Position> listExplosion = new ArrayList<>();
+    private boolean boomed = false;
 
-    public Bomb(Game game,Position position){
-        super(game,position);
-        this.range=game.getPlayer().getRange();
-        t.schedule(kaboom,4000);
+    public Bomb(Game game, Position position) {
+        super(game, position);
+        this.range = game.getPlayer().getRange();
+        Timer t = new Timer();
+        t.schedule(kaboom, 4000);
     }
 
     TimerTask kaboom = new TimerTask() {
         public void run() {
-            boomed=true;
+            boomed = true;
         }
     };
 
@@ -84,7 +85,7 @@ public class Bomb extends GameObject {
 
         TimerTask explosion = new TimerTask() {
             public void run() {
-                listExplosion.forEach(e -> world.clear(e));
+                listExplosion.forEach(world::clear);
                 world.setAffichage(true);
             }
         };

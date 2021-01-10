@@ -12,24 +12,24 @@ import static fr.ubx.poo.view.image.ImageResource.*;
 public final class ImageFactory {
     private final Image[] images;
 
-    private final ImageResource[] playDirectionsIndestructible = new ImageResource[]{
+    private final ImageResource[] playDirectionsIndestructible = new ImageResource[]{      //Sprites for the player if he's indestructible
             // Direction { N, E, S, W }
             PLAYER_UP_INDESTRUCTIBLE, PLAYER_RIGHT_INDESTRUCTIBLE, PLAYER_DOWN_INDESTRUCTIBLE, PLAYER_LEFT_INDESTRUCTIBLE,
     };
-    private final ImageResource[] playDirections = new ImageResource[]{
+    private final ImageResource[] playDirections = new ImageResource[]{     // Regular Player Sprites
             // Direction { N, E, S, W }
             PLAYER_UP, PLAYER_RIGHT, PLAYER_DOWN, PLAYER_LEFT,
     };
 
-    private final ImageResource[] monDirections_1 = new ImageResource[]{
+    private final ImageResource[] monDirections_1 = new ImageResource[]{   //Sprites for monsters in level 1
             // Direction { N, E, S, W }
             MONSTER_UP, MONSTER_RIGHT, MONSTER_DOWN, MONSTER_LEFT,
     };
-    private final ImageResource[] monDirections_2 = new ImageResource[]{
+    private final ImageResource[] monDirections_2 = new ImageResource[]{  //Sprites for monsters in level 2
             // Direction { N, E, S, W }
             MONSTER_UP, MONSTER_RIGHT_2, MONSTER_DOWN_2, MONSTER_LEFT_2,
     };
-    private final ImageResource[] monDirections_3 = new ImageResource[]{
+    private final ImageResource[] monDirections_3 = new ImageResource[]{  //Sprites for monsters in level 3
             // Direction { N, E, S, W }
             MONSTER_UP_3, MONSTER_RIGHT_3, MONSTER_DOWN_3, MONSTER_LEFT_3,
     };
@@ -74,22 +74,22 @@ public final class ImageFactory {
         return get(digits[i]);
     }
 
-    public Image getPlayer(Direction direction,boolean indestructible) {
-        if (indestructible){
+    public Image getPlayer(Direction direction, boolean indestructible) {    //Depending on the fact if his indestructible, the sprites are gonna be different
+        if (indestructible) {
             return get(playDirectionsIndestructible[direction.ordinal()]);
         }
         return get(playDirections[direction.ordinal()]);
     }
-    public Image getMonster(Direction direction,int level) {
-        if (level==1) {
+
+    public Image getMonster(Direction direction, int level) {     //The Monster we're going to take is depending of the level. The higher the level the meaner looking the monster
+        if (level == 1) {
             return get(monDirections_1[direction.ordinal()]);
-        }
-        else if(level==2){
+        } else if (level == 2) {
             return get(monDirections_2[direction.ordinal()]);
-            }
-        else return get(monDirections_3[direction.ordinal()]);
+        } else return get(monDirections_3[direction.ordinal()]);
     }
-    public Image getBomb(int i){
+
+    public Image getBomb(int i) {
         return get(Bombs[i]);
     }
 
@@ -98,7 +98,7 @@ public final class ImageFactory {
      */
     private static class Holder {
         /**
-         * Instance unique non préinitialisée
+         * Instance unique non pré initialisée
          */
         private final static ImageFactory instance = new ImageFactory();
     }

@@ -5,23 +5,19 @@
 package fr.ubx.poo.game;
 
 
-import java.io.BufferedReader;
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileReader;
-import java.io.IOException;
-import java.io.InputStream;
+import fr.ubx.poo.model.go.character.Monster;
+import fr.ubx.poo.model.go.character.Player;
+
+import java.io.*;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.Properties;
 
-import fr.ubx.poo.model.go.character.*;
-
 public class Game {
     private final World world;
     private final Player player;
-    private List<Monster>  monsters ;
+    private final List<Monster> monsters;
     public int initPlayerLives;
     private int level=0;
     private int levels;
@@ -32,7 +28,7 @@ public class Game {
     public Game(String worldPath) {
         loadConfig(worldPath);
         world=new World(loadGame(worldPath));
-        Position positionPlayer = null;
+        Position positionPlayer;
         monsters = world.findMonster(this);
         
         try {

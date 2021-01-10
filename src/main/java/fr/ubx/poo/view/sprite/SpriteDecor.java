@@ -24,7 +24,5 @@ public class SpriteDecor extends Sprite {
     }
 
 
-    public void setState(boolean indestructible) {
-    }
 
 }

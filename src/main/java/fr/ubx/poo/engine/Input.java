@@ -20,27 +20,21 @@ public final class Input {
      * released.
      */
     private final BitSet keyboardBitSet = new BitSet();
-    /**
-     * "Key Pressed" handler for all input events: register pressed key in the bitset
-     */
-    private final EventHandler<KeyEvent> keyPressedEventHandler = event -> {
-
-        // register key down
-        keyboardBitSet.set(event.getCode().ordinal(), true);
-    };
-    /**
-     * "Key Released" handler for all input events: unregister released key in the bitset
-     */
-    private final EventHandler<KeyEvent> keyReleasedEventHandler = event -> {
-
-        // register key up
-        keyboardBitSet.set(event.getCode().ordinal(), false);
-    };
-    private final Scene scene;
 
     public Input(Scene scene) {
-        this.scene = scene;
+        // register key down
+        EventHandler<KeyEvent> keyPressedEventHandler = event -> {
+
+            // register key down
+            keyboardBitSet.set(event.getCode().ordinal(), true);
+        };
         scene.addEventFilter(KeyEvent.KEY_PRESSED, keyPressedEventHandler);
+        // register key up
+        EventHandler<KeyEvent> keyReleasedEventHandler = event -> {
+
+            // register key up
+            keyboardBitSet.set(event.getCode().ordinal(), false);
+        };
         scene.addEventFilter(KeyEvent.KEY_RELEASED, keyReleasedEventHandler);
     }
 

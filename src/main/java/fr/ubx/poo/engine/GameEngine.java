@@ -223,24 +223,24 @@ public final class GameEngine {
     	//Remove the sprites of the dead monster
         if (monsterDead) {
             for (int i = 0; i < spriteMonster.size(); i++) {
-                if(i==iDeadMonster){
+                if (i == iDeadMonster) {
                     spriteMonster.get(i).remove();
                     spriteMonster.remove(i);
-                    monsterDead=false;
-                    iDeadMonster=0;
+                    monsterDead = false;
+                    iDeadMonster = 0;
                 }
             }
         }
         //Remove the sprites of exploded bombs
-        for(int i=0;i<spriteBomb.size();i++){
-            if (spriteBomb.get(i).getBomb().getBoomed()){
+        for (int i = 0; i < spriteBomb.size(); i++) {
+            if (spriteBomb.get(i).getBomb().getBoomed()) {
                 spriteBomb.get(i).remove();
                 spriteBomb.remove(i);
-        		game.getWorld().setAffichage(true);
+                game.getWorld().setAffichage(true);
             }
         }
         //Render all the sprites
-        sprites.forEach(Sprite :: render);
+        sprites.forEach(Sprite::render);
         //Render the monsters sprites
         spriteMonster.forEach(Sprite::render);
         //Render the bombs sprites

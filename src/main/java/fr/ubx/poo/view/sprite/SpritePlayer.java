@@ -21,11 +21,7 @@ public class SpritePlayer extends SpriteGameObject {
         setImage(ImageFactory.getInstance().getPlayer(player.getDirection(), indestructible));
     }
 
-    public void setState(int state) {
-        if (state == 0) {
-            this.indestructible = true;
-        } else {
-            this.indestructible = false;
-        }
+    public void setState(int state) {                   //Used in GameEngine. If he's in the firsts secs of a Level, the state is going  be 0. The rest of the time, it's 1
+        this.indestructible = state == 0;
     }
 }
