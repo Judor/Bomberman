@@ -5,10 +5,14 @@
 package fr.ubx.poo.engine;
 
 import fr.ubx.poo.game.Direction;
-import fr.ubx.poo.view.sprite.*;
 import fr.ubx.poo.game.Game;
 import fr.ubx.poo.game.PositionNotFoundException;
-import fr.ubx.poo.model.go.character.*;
+import fr.ubx.poo.model.go.character.Bomb;
+import fr.ubx.poo.model.go.character.Monster;
+import fr.ubx.poo.model.go.character.Player;
+import fr.ubx.poo.view.sprite.Sprite;
+import fr.ubx.poo.view.sprite.SpriteBomb;
+import fr.ubx.poo.view.sprite.SpriteFactory;
 import javafx.animation.AnimationTimer;
 import javafx.application.Platform;
 import javafx.scene.Group;
@@ -20,10 +24,11 @@ import javafx.scene.text.Font;
 import javafx.scene.text.Text;
 import javafx.scene.text.TextAlignment;
 import javafx.stage.Stage;
-import java.util.TimerTask;
-import java.util.Timer;
+
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Timer;
+import java.util.TimerTask;
 
 
 public final class GameEngine {
@@ -95,7 +100,7 @@ public final class GameEngine {
         monsterDead=false;
         spriteMonster.clear();  //We clear the monsters from previous levels.
         monsters.forEach(monster -> spriteMonster.add(SpriteFactory.createMonster(layer, monster))); //Create the monsters sprites
-        spriteMonster.forEach(sprite -> sprite.setState(game.getLevel()+1));
+        spriteMonster.forEach(sprite -> sprite.setState(game.getLevel() + 1));//Set the sprites for the adequate level
         MonstersMoveAutomatically(); //Make Monsters move by themselves
     }
 
