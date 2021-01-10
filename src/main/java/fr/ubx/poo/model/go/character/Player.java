@@ -64,35 +64,35 @@ public class Player extends GameObject implements Movable {
         setPosition(nextPos);
 
         if (nextDec instanceof Heart) {
-            setLives(lives + 1);
+            this.lives++;
             world.clear(nextPos);
             world.setAffichage(true);
         }
         if (nextDec instanceof Key) {
-            setKeys(keys + 1);
+            this.keys++;
             world.clear(nextPos);
             world.setAffichage(true);
         }
         if (nextDec instanceof Bombnumberdec) {
             if (bombs > 0) {
-                setBombs(bombs - 1);
+                this.bombs--;
                 world.clear(nextPos);
                 world.setAffichage(true);
             }
         }
         if (nextDec instanceof Bombnumberinc) {
-            setBombs(bombs + 1);
+            this.bombs++;
             world.clear(nextPos);
             world.setAffichage(true);
         }
         if (nextDec instanceof Bombrangeinc) {
-            setRange(range + 1);
+            this.range++;
             world.clear(nextPos);
             world.setAffichage(true);
         }
         if (nextDec instanceof Bombrangedec) {
             if (range > 1) {
-                setRange(range - 1);
+                this.range--;
                 world.clear(nextPos);
                 world.setAffichage(true);
             }
@@ -177,10 +177,6 @@ public class Player extends GameObject implements Movable {
         return lives;
     }
 
-    public void setLives(int L) {
-        this.lives=L;
-    }
-
     public void decBomb(){
         this.bombs=this.bombs-1;
     }
@@ -201,25 +197,11 @@ public class Player extends GameObject implements Movable {
 		return range;
 	}
 
-	public void setRange(int ranges) {
-		this.range = ranges;
-	}
-
 	public int getBombs() {
 		return bombs;
-	}
-
-	public void setBombs(int bombs) {
-		this.bombs = bombs;
 	}
 
 	public int getKeys() {
 		return keys;
 	}
-
-	public void setKeys(int keys) {
-		this.keys = keys;
-	}
-
-
 }

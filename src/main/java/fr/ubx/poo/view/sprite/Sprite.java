@@ -9,11 +9,8 @@ import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.Pane;
 
-import java.util.Timer;
-import java.util.TimerTask;
 
 public abstract class Sprite {
-    Timer t=new Timer();
     public static final int size = 40;
     private final Pane layer;
     private ImageView imageView;
@@ -50,4 +47,6 @@ public abstract class Sprite {
         imageView = null;
     }
 
+    public void setState(int state) {
+    }
 }

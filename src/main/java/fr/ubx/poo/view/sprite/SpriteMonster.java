@@ -9,6 +9,7 @@ import fr.ubx.poo.view.image.ImageFactory;
 import javafx.scene.layout.Pane;
 
 public class SpriteMonster extends SpriteGameObject {
+    private int state;
 
     public SpriteMonster(Pane layer, Monster monster) {
         super(layer, null, monster);
@@ -18,7 +19,12 @@ public class SpriteMonster extends SpriteGameObject {
     @Override
     public void updateImage() {
         Monster monster = (Monster) go;
-        setImage(ImageFactory.getInstance().getMonster(monster.getDirection()));
+        setImage(ImageFactory.getInstance().getMonster(monster.getDirection(),state));
+    }
+
+
+    public void setState(int state) {
+        this.state=state;
     }
 
 }

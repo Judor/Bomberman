@@ -12,13 +12,26 @@ import static fr.ubx.poo.view.image.ImageResource.*;
 public final class ImageFactory {
     private final Image[] images;
 
-    private final ImageResource[] Playdirections = new ImageResource[]{
+    private final ImageResource[] playDirectionsIndestructible = new ImageResource[]{
+            // Direction { N, E, S, W }
+            PLAYER_UP_INDESTRUCTIBLE, PLAYER_RIGHT_INDESTRUCTIBLE, PLAYER_DOWN_INDESTRUCTIBLE, PLAYER_LEFT_INDESTRUCTIBLE,
+    };
+    private final ImageResource[] playDirections = new ImageResource[]{
             // Direction { N, E, S, W }
             PLAYER_UP, PLAYER_RIGHT, PLAYER_DOWN, PLAYER_LEFT,
     };
-    private final ImageResource[] Mondirections = new ImageResource[]{
+
+    private final ImageResource[] monDirections_1 = new ImageResource[]{
             // Direction { N, E, S, W }
             MONSTER_UP, MONSTER_RIGHT, MONSTER_DOWN, MONSTER_LEFT,
+    };
+    private final ImageResource[] monDirections_2 = new ImageResource[]{
+            // Direction { N, E, S, W }
+            MONSTER_UP, MONSTER_RIGHT_2, MONSTER_DOWN_2, MONSTER_LEFT_2,
+    };
+    private final ImageResource[] monDirections_3 = new ImageResource[]{
+            // Direction { N, E, S, W }
+            MONSTER_UP_3, MONSTER_RIGHT_3, MONSTER_DOWN_3, MONSTER_LEFT_3,
     };
 
     private final ImageResource[] digits = new ImageResource[]{
@@ -29,8 +42,6 @@ public final class ImageFactory {
     private final ImageResource[] Bombs = new ImageResource[]{
             BOMB_4, BOMB_3, BOMB_2, BOMB_1
     };
-
-
 
     private ImageFactory() {
         images = new Image[ImageResource.values().length];
@@ -63,11 +74,20 @@ public final class ImageFactory {
         return get(digits[i]);
     }
 
-    public Image getPlayer(Direction direction) {
-        return get(Playdirections[direction.ordinal()]);
+    public Image getPlayer(Direction direction,boolean indestructible) {
+        if (indestructible){
+            return get(playDirectionsIndestructible[direction.ordinal()]);
+        }
+        return get(playDirections[direction.ordinal()]);
     }
-    public Image getMonster(Direction direction) {
-        return get(Mondirections[direction.ordinal()]);
+    public Image getMonster(Direction direction,int level) {
+        if (level==1) {
+            return get(monDirections_1[direction.ordinal()]);
+        }
+        else if(level==2){
+            return get(monDirections_2[direction.ordinal()]);
+            }
+        else return get(monDirections_3[direction.ordinal()]);
     }
     public Image getBomb(int i){
         return get(Bombs[i]);

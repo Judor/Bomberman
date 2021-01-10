@@ -22,4 +22,9 @@ public class SpriteDecor extends Sprite {
     public Position getPosition() {
         return position;
     }
+
+
+    public void setState(boolean indestructible) {
+    }
+
 }

@@ -13,7 +13,7 @@ import fr.ubx.poo.game.Game;
 
 public class Monster extends GameObject implements Movable {
     Direction direction;
-    private int lives=1;
+    private int lives;
     private boolean moveRequested = false;
     private boolean alive=true;
 
@@ -67,7 +67,7 @@ public class Monster extends GameObject implements Movable {
             Player player=game.getPlayer();
 
             if (nextDec instanceof Heart) {
-                setLives(lives+1);
+                this.lives++;
                 world.clear(nextPos);
                 world.setAffichage(true);
             }
@@ -88,15 +88,11 @@ public class Monster extends GameObject implements Movable {
 
     public void getHurt(Position pos){
         if (pos.equals(this.getPosition())) {
-        	lives=lives-1;
+        	lives--;
         	if (lives == 0) {
         		alive = false;
         	}
         }
-    }
-
-    public void setLives(int l) {
-        this.lives=l;
     }
 
     public Direction getDirection() {

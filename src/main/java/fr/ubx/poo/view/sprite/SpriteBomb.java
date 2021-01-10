@@ -32,6 +32,9 @@ public class SpriteBomb extends SpriteGameObject {
         }
     }
 
+    public void setIndestructible(boolean indestructible) {
+    }
+
     private TimerTask state1 = new TimerTask() {
         @Override
         public void run() {

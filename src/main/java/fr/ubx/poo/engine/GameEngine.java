@@ -84,7 +84,7 @@ public final class GameEngine {
         // Create decor sprites
         game.getWorld().forEach( (pos,d) -> sprites.add(SpriteFactory.createDecor(layer, pos, d)));
 
-        // Create Player sprites and make player strong for 3 first secs
+        // Create Player sprites and make player indestructible for 3 first secs
         spritePlayer = SpriteFactory.createPlayer(layer, player);
         player.mrIndestructible();
 
@@ -94,8 +94,8 @@ public final class GameEngine {
         iDeadMonster=0;
         monsterDead=false;
         spriteMonster.clear();  //We clear the monsters from previous levels.
-        monsters.forEach(monster->monster.setLives(game.getLevel()+1)); // The higher the level, the tougher the monsters
         monsters.forEach(monster -> spriteMonster.add(SpriteFactory.createMonster(layer, monster))); //Create the monsters sprites
+        spriteMonster.forEach(sprite -> sprite.setState(game.getLevel()+1));
         MonstersMoveAutomatically(); //Make Monsters move by themselves
     }
 
@@ -133,7 +133,7 @@ public final class GameEngine {
         if (input.isMoveUp()) {
             player.requestMove(Direction.N);
         }
-        //Let's check if player has a bomb in his inventory,decrement it, create a new bomb and a new sprite associated to it
+        //Let's check if player has a bomb in his inventory,decrement it, and create a new bomb and a new sprite associated to it
         if (input.isBomb()) {
             if (player.getBombs() > 0) {
                 player.decBomb();
@@ -173,8 +173,8 @@ public final class GameEngine {
     		initialize(stage,game);
     	}
     	//Update Monsters
-        //If a monster is dead,  monsterDead will become true, and iDeadMonster will be the "id" of the dead monster that we'll have to delete
-        monsters.forEach(monster -> monster.update());
+        //If a monster is dead, monsterDead will become true, and iDeadMonster will be the "id" of the dead monster that we'll have to delete
+        monsters.forEach(Monster::update);
         iDeadMonster=0;
         for (int i=0;i< monsters.size();i++) {
         	if (!monsters.get(i).isAlive()){
@@ -194,8 +194,8 @@ public final class GameEngine {
             showMessage("Congrats! ", Color.BLUE);
         }
         //Update bombs
-        bombs.forEach(b -> b.update());
-        bombs.removeIf(b -> b.getBoomed());
+        bombs.forEach(Bomb::update);
+        bombs.removeIf(Bomb::getBoomed);
     }
 
     private void MonstersMoveAutomatically(){
@@ -203,9 +203,9 @@ public final class GameEngine {
         t.scheduleAtFixedRate(new TimerTask() {
             @Override
             public void run() {
-            	monsters.forEach(monster -> monster.RandomMove());
+            	monsters.forEach(Monster::RandomMove);
             }
-        }, 1, (3- game.getLevel())*1000); //The higher the level, the faster the monsters
+        }, 1, (3- game.getLevel())* 1000L); //The higher the level, the faster the monsters
     }
 
     private void render() {
@@ -215,7 +215,6 @@ public final class GameEngine {
     		game.getWorld().forEach((Pos,dec) -> sprites.add(SpriteFactory.createDecor(layer,Pos,dec)));
     		game.getWorld().setAffichage(false);
     	}
-
     	//Remove the sprites of the dead monster
         if (monsterDead) {
             for (int i = 0; i < spriteMonster.size(); i++) {
@@ -227,7 +226,6 @@ public final class GameEngine {
                 }
             }
         }
-
         //Remove the sprites of exploded bombs
         for(int i=0;i<spriteBomb.size();i++){
             if (spriteBomb.get(i).getBomb().getBoomed()){
@@ -236,11 +234,20 @@ public final class GameEngine {
         		game.getWorld().setAffichage(true);
             }
         }
-
         //Render all the sprites
         sprites.forEach(Sprite :: render);
+        //Render the monsters sprites
         spriteMonster.forEach(Sprite::render);
+        //Render the bombs sprites
         spriteBomb.forEach(Sprite::render);
+
+        //We check if the player is in his indestructible period. If it's the case, his sprite going to be golden
+        if (player.indestructible()) {
+            spritePlayer.setState(0);
+        }
+        else {
+            spritePlayer.setState(1);
+        }
         spritePlayer.render();
     }
 
