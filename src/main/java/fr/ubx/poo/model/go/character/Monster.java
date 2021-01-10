@@ -5,7 +5,10 @@ import fr.ubx.poo.game.Game;
 import fr.ubx.poo.game.Position;
 import fr.ubx.poo.game.World;
 import fr.ubx.poo.model.Movable;
-import fr.ubx.poo.model.decor.*;
+import fr.ubx.poo.model.decor.Box;
+import fr.ubx.poo.model.decor.Decor;
+import fr.ubx.poo.model.decor.Stone;
+import fr.ubx.poo.model.decor.Tree;
 import fr.ubx.poo.model.go.GameObject;
 
 
@@ -58,15 +61,9 @@ public class Monster extends GameObject implements Movable {
         if (alive){
             World world=game.getWorld();
             Position nextPos = direction.nextPosition(getPosition());
-            Decor nextDec = world.get(nextPos);
             setPosition(nextPos);
             Player player=game.getPlayer();
 
-            if (nextDec instanceof Heart) {
-                this.lives++;
-                world.clear(nextPos);
-                world.setAffichage(true);
-            }
             if (this.getPosition().equals(player.getPosition())) {
                 if (!player.indestructible()) {
                     player.getHurt(player.getPosition());
