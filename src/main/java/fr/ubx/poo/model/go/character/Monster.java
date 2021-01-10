@@ -1,13 +1,12 @@
 package fr.ubx.poo.model.go.character;
 
 import fr.ubx.poo.game.Direction;
+import fr.ubx.poo.game.Game;
 import fr.ubx.poo.game.Position;
 import fr.ubx.poo.game.World;
 import fr.ubx.poo.model.Movable;
-import fr.ubx.poo.model.decor.Decor;
 import fr.ubx.poo.model.decor.*;
 import fr.ubx.poo.model.go.GameObject;
-import fr.ubx.poo.game.Game;
 
 
 
@@ -52,10 +51,7 @@ public class Monster extends GameObject implements Movable {
         World world=game.getWorld();
         Position Pos = direction.nextPosition(getPosition());
         Decor nextDec= world.get(Pos);
-        if (! (Pos.inside(world.getDimension())) || nextDec instanceof Stone  || nextDec instanceof Tree ||  nextDec instanceof Box){
-            return false;
-        }
-        return true;
+        return Pos.inside(world.getDimension()) && !(nextDec instanceof Stone) && !(nextDec instanceof Tree) && !(nextDec instanceof Box);
     }
 
     public void doMove(Direction direction){
