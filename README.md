@@ -1,32 +1,27 @@
 <link rel="stylesheet" href="readme.css">
 
 
-# Projet de POO
+# Projet Bomberman
 
 Réalisation d'un jeu vidéo 2D : **UBomb**.
 
+## Fonctionnalités 
 
-## Principes du jeu
+Toutes les fonctionnalités demandées sont là :
 
-Une princesse est détenue prisonnière par de méchants monstres verts. Votre mission, si vous l'acceptez, est d'aller la délivrer. Pour cela, vous devrez traverser plusieurs mondes, plus effrayants les uns que les autres. Des portes vous permettront de passer de mondes en mondes. Certaines portes seront fermées à clés et nécessiteront d'avoir une clé dans votre inventaire. Vous êtes un expert en explosif et utiliserez vos bombes pour détruire les obstacles devant vous et tuer les monstres qui vous attaqueront.
+Les monstres se déplacent aléatoirement. Leur vitesse augmente au fur et à mesure des niveaux
+Les bombes explosent correctement, leur portée peut être modifiée. L’explosion d’une bombe déclenche l'explosion d’une seconde si elle est dans le souffle de la 1ère. Les box, arbres et rochers bloquent l’explosion dans une certaine direction.L’explosion tue les monstres et donne des dégâts au joueur
+Tous les malus ont une action. La partie se termine si les vies du joueur sont nulles ou si le joueur touche la princesse.
 
 
-## Représentation du jeu
 
-Chaque monde est représenté par une carte (rectangulaire) composée de cellules. Chaque cellule peut contenir :
+## Ajouts non demandés
 
--   le joueur ;
--   la princesse ;
--   des monstres ;
--   des éléments de décor (arbres, pierres...) infranchissables et
-    indestructibles ;
--   des caisses destructibles et déplaçables ; 
--   des portes, ouvertes ou fermées, permettant d’évoluer entre les
-    mondes ;
--   des clés pour débloquer les portes fermées ;
--   des bonus ou des malus qu'il est possible de ramasser.
 
-![Bombeirb](img/ubomb.png)
+Sprite Joueur : Ses contours sont dorés les 3 premières secondes de chaque niveau. C’est sa durée d'invincibilité. On a pris la liberté de créer 4 nouveau visuels dérivés de l’image initiale 
+
+
+![Bombeirb](img/player_indestructible.png)(img/player_indestructible.png)
 
 ## Prise en main
 
