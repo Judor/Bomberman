@@ -18,8 +18,6 @@ public abstract class Sprite {
     private final Pane layer;
     private ImageView imageView;
     private Image image;
-    private boolean explosionSaw=false;
-    private boolean explosion=false;
 
     public Sprite(Pane layer, Image image) {
         this.layer = layer;
@@ -50,24 +48,6 @@ public abstract class Sprite {
     public final void remove() {
         layer.getChildren().remove(imageView);
         imageView = null;
-    }
-    public void explose(){
-        TimerTask setExplosionSaw = new TimerTask() {
-            @Override
-            public void run() {
-                explosionSaw=true;
-                explosion=true;
-            }
-        };
-        t.schedule(setExplosionSaw, 1000);
-    }
-
-    public boolean getIfExplosion(){
-        return explosion;
-    }
-
-    public boolean getExplosionSaw(){
-        return explosionSaw;
     }
 
 }

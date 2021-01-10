@@ -1,18 +1,13 @@
 package fr.ubx.poo.view.sprite;
 
-import fr.ubx.poo.game.Direction;
-import fr.ubx.poo.game.Position;
-import fr.ubx.poo.model.decor.*;
+
 import fr.ubx.poo.model.go.character.*;
 import fr.ubx.poo.view.image.ImageFactory;
-import fr.ubx.poo.view.image.ImageResource;
-import javafx.scene.effect.ColorAdjust;
-import javafx.scene.image.Image;
-import javafx.scene.image.ImageView;
+
 import javafx.scene.layout.Pane;
-import java.awt.*;
-import java.util.*;
-import java.util.concurrent.TimeUnit;
+import java.util.TimerTask;
+import java.util.Timer;
+
 
 public class SpriteBomb extends SpriteGameObject {
     Timer t=new Timer();
@@ -62,10 +57,7 @@ public class SpriteBomb extends SpriteGameObject {
         }
     };
 
-    public boolean getBoom(){
-        return (state==4) ;
-    }
-    
+
     public Bomb getBomb() {
     	return (Bomb) this.go;
     }

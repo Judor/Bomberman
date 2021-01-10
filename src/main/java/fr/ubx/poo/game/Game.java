@@ -21,8 +21,7 @@ import fr.ubx.poo.model.go.character.*;
 public class Game {
     private final World world;
     private final Player player;
-    private List<Monster>  monsters = new ArrayList<>();
-    private final String worldPath;
+    private List<Monster>  monsters ;
     public int initPlayerLives;
     private int level=0;
     private int levels;
@@ -31,7 +30,6 @@ public class Game {
     
 
     public Game(String worldPath) {
-        this.worldPath = worldPath;
         loadConfig(worldPath);
         world=new World(loadGame(worldPath));
         Position positionPlayer = null;
@@ -128,7 +126,7 @@ public class Game {
 	}
 	
 	public void setLevel(int l) {
-		this.getWorld().setActualLevel(l);
+		world.setActualLevel(l);
 		this.level=l;
 	}
 	public List<Monster> getMonsters() {

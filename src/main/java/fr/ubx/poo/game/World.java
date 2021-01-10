@@ -5,12 +5,9 @@
 package fr.ubx.poo.game;
 
 import fr.ubx.poo.model.decor.Decor;
-import fr.ubx.poo.model.decor.Explosion;
 import fr.ubx.poo.model.go.character.Monster;
-import fr.ubx.poo.view.sprite.SpriteFactory;
 
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.List;
 import java.util.Map;
 import java.util.function.BiConsumer;
@@ -36,7 +33,7 @@ public class World {
 
 
     public Position findPlayer() throws PositionNotFoundException {
-    	Position pos = null;
+    	Position pos;
     	if (isLevelP()) pos = findEntity(WorldEntity.DoorNextClosed);
     	else {
     		if (isLevelUp()) pos = findEntity(WorldEntity.DoorPrevOpened);
@@ -92,10 +89,6 @@ public class World {
 
     public void forEach(BiConsumer<Position, Decor> fn) {
         grid.get(actualLevel).forEach(fn);
-    }
-
-    public Collection<Decor> values() {
-        return grid.get(actualLevel).values();
     }
 
     public boolean isEmpty(Position position) {

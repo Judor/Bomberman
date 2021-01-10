@@ -5,12 +5,10 @@
 package fr.ubx.poo.engine;
 
 import fr.ubx.poo.game.Direction;
-import fr.ubx.poo.model.decor.Explosion;
 import fr.ubx.poo.view.sprite.*;
 import fr.ubx.poo.game.Game;
 import fr.ubx.poo.game.PositionNotFoundException;
 import fr.ubx.poo.model.go.character.*;
-import fr.ubx.poo.view.sprite.SpriteMonster;
 import javafx.animation.AnimationTimer;
 import javafx.application.Platform;
 import javafx.scene.Group;
@@ -22,8 +20,10 @@ import javafx.scene.text.Font;
 import javafx.scene.text.Text;
 import javafx.scene.text.TextAlignment;
 import javafx.stage.Stage;
-
-import java.util.*;
+import java.util.TimerTask;
+import java.util.Timer;
+import java.util.ArrayList;
+import java.util.List;
 
 
 public final class GameEngine {
@@ -35,14 +35,14 @@ public final class GameEngine {
     private Input input;
     private Stage stage;
     private final Player player;
-    private List<Monster> monsters;
-    private List<Bomb> bombs= new ArrayList<>();
+    private final List<Monster> monsters;
+    private final List<Bomb> bombs= new ArrayList<>();
     private boolean monsterDead=false;
     private int iDeadMonster=0;
     private Sprite spritePlayer;
     private final List<Sprite> sprites = new ArrayList<>();
-    private List<SpriteBomb> spriteBomb=new ArrayList<>();
-    private List<Sprite> spriteMonster=new ArrayList<>();
+    private final List<SpriteBomb> spriteBomb=new ArrayList<>();
+    private final List<Sprite> spriteMonster=new ArrayList<>();
 
 
     public GameEngine(final String windowTitle, Game game, final Stage stage) {
@@ -84,8 +84,9 @@ public final class GameEngine {
         // Create decor sprites
         game.getWorld().forEach( (pos,d) -> sprites.add(SpriteFactory.createDecor(layer, pos, d)));
 
-        // Create Player sprites
+        // Create Player sprites and make player strong for 3 first secs
         spritePlayer = SpriteFactory.createPlayer(layer, player);
+        player.mrIndestructible();
 
         // Create Monsters and their sprites
         monsters.clear();
@@ -102,10 +103,10 @@ public final class GameEngine {
         gameLoop = new AnimationTimer() {
             public void handle(long now) {
                 // Check keyboard actions
-                processInput(now);
+                processInput();
 
                 // Do actions
-                update(now);
+                update();
 
                 // Graphic update
                 render();
@@ -114,7 +115,7 @@ public final class GameEngine {
         };
     }
 
-    private void processInput(long now) {
+    private void processInput() {
         if (input.isExit()) {
             gameLoop.stop();
             Platform.exit();
@@ -161,19 +162,19 @@ public final class GameEngine {
         stage.show();
         new AnimationTimer() {
             public void handle(long now) {
-                processInput(now);
+                processInput();
             }
         }.start();
     }
 
-    private void update(long now) {
+    private void update() {
     	if (game.isChangedLevel()) {
     		game.setChangedLevel(false);
     		initialize(stage,game);
     	}
     	//Update Monsters
         //If a monster is dead,  monsterDead will become true, and iDeadMonster will be the "id" of the dead monster that we'll have to delete
-        monsters.forEach(monster -> monster.update(now));
+        monsters.forEach(monster -> monster.update());
         iDeadMonster=0;
         for (int i=0;i< monsters.size();i++) {
         	if (!monsters.get(i).isAlive()){
@@ -214,7 +215,8 @@ public final class GameEngine {
     		game.getWorld().forEach((Pos,dec) -> sprites.add(SpriteFactory.createDecor(layer,Pos,dec)));
     		game.getWorld().setAffichage(false);
     	}
-    	//Remove the sprites of dead monsters
+
+    	//Remove the sprites of the dead monster
         if (monsterDead) {
             for (int i = 0; i < spriteMonster.size(); i++) {
                 if(i==iDeadMonster){
@@ -225,6 +227,7 @@ public final class GameEngine {
                 }
             }
         }
+
         //Remove the sprites of exploded bombs
         for(int i=0;i<spriteBomb.size();i++){
             if (spriteBomb.get(i).getBomb().getBoomed()){
@@ -233,6 +236,7 @@ public final class GameEngine {
         		game.getWorld().setAffichage(true);
             }
         }
+
         //Render all the sprites
         sprites.forEach(Sprite :: render);
         spriteMonster.forEach(Sprite::render);

@@ -13,9 +13,10 @@ import fr.ubx.poo.view.sprite.SpriteBomb;
 import java.util.*;
 
 public class Bomb extends GameObject {
-    private List<Position> listExplosion=new ArrayList<>();
+
     private Timer t=new Timer();
     private int range;
+    private List<Position> listExplosion=new ArrayList<>();
     private boolean boomed=false;
 
     public Bomb(Game game,Position position){
@@ -32,7 +33,7 @@ public class Bomb extends GameObject {
 
     public void theBomb() {
         World world = game.getWorld();
-        Player player=game.getPlayer();
+        Player player = game.getPlayer();
         List<Monster> monsters = game.getMonsters();
         for (Direction direction : Direction.values()) {
             Position nextPos = getPosition();
@@ -40,7 +41,7 @@ public class Bomb extends GameObject {
                 nextPos = direction.nextPosition(nextPos);
                 Decor nextDec = world.get(nextPos);
 
-                if(world.isEmpty(nextPos)){
+                if((world.isEmpty(nextPos))&&(nextPos.inside(world.getDimension()))){
                     listExplosion.add(nextPos);
 
                 }
@@ -56,10 +57,8 @@ public class Bomb extends GameObject {
                     break;
                 }
                 if (nextDec instanceof Stone || nextDec instanceof Tree || nextDec instanceof Bomberwoman || nextDec instanceof Doorprevopened || nextDec instanceof Doornextopened || nextDec instanceof Doornextclosed) {
-
                     break;
                 }
-
                 if (nextDec instanceof Bombnumberdec) {
                     listExplosion.add(nextPos);
                     world.clear(nextPos);
@@ -81,9 +80,7 @@ public class Bomb extends GameObject {
             }
         }
         listExplosion.add(getPosition());
-        System.out.println("pos player : " + getPosition());
-        listExplosion.forEach(e -> world.set(e, new Explosion()));
-        listExplosion.forEach(e -> System.out.println("position : "+e));
+        listExplosion.forEach(e -> world.set(e, new Explosion()));      //Create the explosion Sprite for each impacted position
 
         TimerTask explosion = new TimerTask() {
             public void run() {
@@ -93,14 +90,13 @@ public class Bomb extends GameObject {
         };
 
         Timer t1 = new Timer();
-        t1.schedule(explosion, 1000);
+        t1.schedule(explosion, 1000);   //New timer to make last the explosion sprite for 1sec and then clear it
         player.incBomb();
-        world.setAffichage(true);
         boomed = true;
     }
 
-    public void update() {
-        Decor d = game.getWorld().get(getPosition());
+    public void update() {                              //We check if boomed is true.If it's the case, it have been 4 secs since the creation of the bomb
+        Decor d = game.getWorld().get(getPosition());   //We also check if the bomb is in the explosion range of another one. If it's the case, it have to bomb right away
         if (boomed || d instanceof Explosion) {
             boomed=true;
             theBomb();
